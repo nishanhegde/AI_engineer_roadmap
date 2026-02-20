@@ -1,0 +1,5 @@
+# Local progress files — do NOT push to git
+progress/*.json
+
+# macOS
+.DS_Store

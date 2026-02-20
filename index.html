@@ -704,6 +704,57 @@
     .text-muted { color: var(--muted); }
     .font-mono { font-family: monospace; }
 
+    /* Profile section */
+    .profile-section {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .profile-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      margin-top: 6px;
+    }
+
+    .profile-select {
+      flex: 1;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 6px;
+      padding: 5px 8px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .profile-select:focus { outline: none; border-color: var(--accent); }
+
+    .new-profile-row {
+      display: none;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .profile-input {
+      flex: 1;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 6px;
+      padding: 5px 8px;
+      font-size: 12px;
+    }
+
+    .profile-input:focus { outline: none; border-color: var(--accent); }
+
+    .profile-status {
+      font-size: 11px;
+      color: var(--success);
+      margin-top: 5px;
+      min-height: 14px;
+    }
+
     .overall-bar {
       height: 8px;
       background: var(--bg3);
@@ -750,7 +801,7 @@
   <div>Loading roadmap data…</div>
   <div class="loading-hint">
     If this doesn't load, serve from a local server:<br><br>
-    <code>python3 -m http.server 7001</code><br>
+    <code>python3 server.py</code><br>
     then open <code>http://localhost:7001</code>
   </div>
 </div>
@@ -787,6 +838,23 @@
         <span class="stat-label">Current Streak</span>
         <span class="streak-badge" id="streak-badge">🔥 0 days</span>
       </div>
+    </div>
+
+    <!-- Profile -->
+    <div class="profile-section">
+      <div class="nav-section-title">PROFILE</div>
+      <div class="profile-row">
+        <select id="profile-select" class="profile-select" onchange="selectProfile(this.value)">
+          <option value="">— no profile —</option>
+        </select>
+        <button class="btn-sm btn-primary" style="flex-shrink:0;padding:5px 10px" onclick="showNewProfile()">+</button>
+      </div>
+      <div id="new-profile-row" class="new-profile-row">
+        <input id="profile-name-input" class="profile-input" type="text" placeholder="Your name…" maxlength="30"
+          onkeydown="if(event.key==='Enter')createProfile()">
+        <button class="btn-sm btn-primary" onclick="createProfile()">Create</button>
+      </div>
+      <div id="profile-status" class="profile-status"></div>
     </div>
 
     <!-- Month Navigation -->
@@ -903,9 +971,11 @@
 // State
 // ─────────────────────────────────────────────────────────────────────────────
 const STORAGE_KEY = 'ai_roadmap_progress';
+const PROFILE_KEY  = 'ai_roadmap_active_profile';
 let roadmap = null;
 let activeMonth = 1;
 let activeDay = null;
+let activeProfile = null;
 let progress = { version: 1, tasks: {}, notes: {}, lastUpdated: null };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -919,6 +989,7 @@ async function init() {
     roadmap = await res.json();
     document.getElementById('loading').classList.add('hidden');
     document.getElementById('app').classList.remove('hidden');
+    await loadProfiles();
     buildSidebar();
     renderMonth(activeMonth);
   } catch (e) {
@@ -926,7 +997,7 @@ async function init() {
       <div style="color:var(--danger);font-weight:700;font-size:16px">Failed to load daily_tasks.json</div>
       <div class="loading-hint">
         Run a local server from the roadmap folder:<br><br>
-        <code>python3 -m http.server 7001</code><br><br>
+        <code>python3 server.py</code><br><br>
         Then open: <code>http://localhost:7001</code>
       </div>`;
   }
@@ -945,6 +1016,107 @@ function loadProgress() {
 function saveProgress() {
   progress.lastUpdated = new Date().toISOString();
   localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+  saveToFile();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Profile management
+// ─────────────────────────────────────────────────────────────────────────────
+async function loadProfiles() {
+  try {
+    const res = await fetch('/api/profiles');
+    if (!res.ok) return;
+    const profiles = await res.json();
+    const select = document.getElementById('profile-select');
+    select.innerHTML = '<option value="">— no profile —</option>';
+    profiles.forEach(name => {
+      const opt = document.createElement('option');
+      opt.value = name;
+      opt.textContent = name;
+      select.appendChild(opt);
+    });
+    const last = localStorage.getItem(PROFILE_KEY);
+    if (last && profiles.includes(last)) {
+      select.value = last;
+      await selectProfile(last, false);
+    }
+  } catch {}
+}
+
+async function selectProfile(name, rerender = true) {
+  if (!name) {
+    activeProfile = null;
+    localStorage.removeItem(PROFILE_KEY);
+    setProfileStatus('');
+    return;
+  }
+  activeProfile = name;
+  localStorage.setItem(PROFILE_KEY, name);
+  try {
+    const res = await fetch(`/api/profile/${encodeURIComponent(name)}`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.version) {
+        progress = data;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+        if (rerender && roadmap) {
+          updateGlobalStats();
+          renderMonth(activeMonth);
+          if (activeDay) {
+            const month = roadmap.months.find(m => m.id === activeMonth);
+            const day = month?.weeks.flatMap(w => w.days).find(d => d.day === activeDay);
+            if (day) renderDayTasks(month, day);
+          }
+        }
+      }
+    }
+    setProfileStatus(`✓ ${name}`);
+  } catch {
+    setProfileStatus('');
+  }
+}
+
+async function createProfile() {
+  const input = document.getElementById('profile-name-input');
+  const name = input.value.trim();
+  if (!name) return;
+  const select = document.getElementById('profile-select');
+  if (!Array.from(select.options).some(o => o.value === name)) {
+    const opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = name;
+    select.appendChild(opt);
+  }
+  select.value = name;
+  activeProfile = name;
+  localStorage.setItem(PROFILE_KEY, name);
+  await saveToFile();
+  input.value = '';
+  document.getElementById('new-profile-row').style.display = 'none';
+  setProfileStatus(`✓ ${name}`);
+}
+
+function showNewProfile() {
+  const row = document.getElementById('new-profile-row');
+  const open = row.style.display === 'flex';
+  row.style.display = open ? 'none' : 'flex';
+  if (!open) document.getElementById('profile-name-input').focus();
+}
+
+async function saveToFile() {
+  if (!activeProfile) return;
+  try {
+    await fetch(`/api/profile/${encodeURIComponent(activeProfile)}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(progress)
+    });
+  } catch {}
+}
+
+function setProfileStatus(msg) {
+  const el = document.getElementById('profile-status');
+  if (el) el.textContent = msg;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
