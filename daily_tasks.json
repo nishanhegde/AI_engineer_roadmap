@@ -1,0 +1,2285 @@
+{
+  "meta": {
+    "title": "6-Month AI Engineer Roadmap",
+    "totalDays": 120,
+    "hoursPerDay": "1-2",
+    "description": "A hands-on, project-based learning roadmap for experienced developers targeting LLM/GenAI Engineer roles.",
+    "version": "1.0"
+  },
+  "months": [
+    {
+      "id": 1,
+      "title": "LLM Fundamentals",
+      "color": "#6366f1",
+      "project": {
+        "name": "Multi-Provider LLM CLI Tool",
+        "description": "Build a CLI tool that supports OpenAI, Anthropic, and Ollama with streaming, conversation history, and cost tracking."
+      },
+      "weeks": [
+        {
+          "weekNumber": 1,
+          "title": "Python Refresh + API Foundations",
+          "concepts": ["OpenAI SDK", "Anthropic SDK", "Pydantic", "async/await", "API authentication"],
+          "days": [
+            {
+              "day": 1,
+              "title": "Dev Environment & Python Async Refresh",
+              "tasks": [
+                "Set up a Python 3.11+ virtual environment with uv or poetry",
+                "Review Python async/await patterns: create 3 async functions that fetch data concurrently",
+                "Install openai, anthropic, pydantic, and typer packages",
+                "Write a Pydantic model for an LLM API request (model, messages, temperature, max_tokens)",
+                "Verify setup by running a simple async script"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "uv - Python Package Manager", "url": "https://docs.astral.sh/uv/"},
+                {"title": "Python asyncio Documentation", "url": "https://docs.python.org/3/library/asyncio.html"},
+                {"title": "Pydantic V2 Documentation", "url": "https://docs.pydantic.dev/latest/"}
+              ]
+            },
+            {
+              "day": 2,
+              "title": "OpenAI API Deep Dive",
+              "tasks": [
+                "Read OpenAI API reference for chat completions endpoint",
+                "Make your first API call using the OpenAI Python SDK",
+                "Experiment with temperature, top_p, and max_tokens parameters",
+                "Implement a simple multi-turn conversation (maintain message history)",
+                "Handle API errors gracefully (rate limits, invalid requests, timeouts)"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "OpenAI API Reference", "url": "https://platform.openai.com/docs/api-reference/chat"},
+                {"title": "OpenAI Python SDK GitHub", "url": "https://github.com/openai/openai-python"},
+                {"title": "OpenAI Cookbook", "url": "https://cookbook.openai.com/"}
+              ]
+            },
+            {
+              "day": 3,
+              "title": "Anthropic API Deep Dive",
+              "tasks": [
+                "Read Anthropic API reference for messages endpoint",
+                "Make your first Anthropic API call with claude-sonnet",
+                "Compare Anthropic's message format with OpenAI's (system prompt handling differences)",
+                "Implement the same multi-turn conversation using Anthropic's SDK",
+                "Write a comparison script that sends the same prompt to both providers"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "Anthropic API Reference", "url": "https://docs.anthropic.com/en/api/messages"},
+                {"title": "Anthropic Python SDK", "url": "https://github.com/anthropics/anthropic-sdk-python"},
+                {"title": "Anthropic Prompt Engineering Guide", "url": "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering"}
+              ]
+            },
+            {
+              "day": 4,
+              "title": "Provider Abstraction Layer",
+              "tasks": [
+                "Design a unified interface (Protocol/ABC) for LLM providers",
+                "Implement OpenAIProvider class wrapping the OpenAI SDK",
+                "Implement AnthropicProvider class wrapping the Anthropic SDK",
+                "Create a ProviderFactory that returns the correct provider by name",
+                "Write unit tests for the abstraction layer using mock responses"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Python Protocols (PEP 544)", "url": "https://peps.python.org/pep-0544/"},
+                {"title": "Factory Pattern in Python", "url": "https://refactoring.guru/design-patterns/factory-method/python/example"},
+                {"title": "pytest Documentation", "url": "https://docs.pytest.org/en/stable/"}
+              ]
+            },
+            {
+              "day": 5,
+              "title": "Pydantic Models & Configuration",
+              "tasks": [
+                "Create Pydantic models for: ChatMessage, ChatRequest, ChatResponse, ProviderConfig",
+                "Implement a YAML/TOML config file loader for API keys and defaults",
+                "Add input validation with custom Pydantic validators",
+                "Write a configuration manager that supports env vars + config file",
+                "Test all models with valid and invalid data"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "Pydantic Settings Management", "url": "https://docs.pydantic.dev/latest/concepts/pydantic_settings/"},
+                {"title": "Pydantic Validators", "url": "https://docs.pydantic.dev/latest/concepts/validators/"},
+                {"title": "12-Factor App Config", "url": "https://12factor.net/config"}
+              ]
+            }
+          ]
+        },
+        {
+          "weekNumber": 2,
+          "title": "Prompt Engineering & Conversation Memory",
+          "concepts": ["system prompts", "few-shot learning", "chain-of-thought", "conversation memory", "token counting"],
+          "days": [
+            {
+              "day": 6,
+              "title": "System Prompts & Personas",
+              "tasks": [
+                "Study effective system prompt patterns (role, constraints, output format)",
+                "Create 5 different system prompts for different personas (coder, writer, analyst, tutor, critic)",
+                "Implement a system prompt manager with CRUD operations",
+                "Test how different system prompts affect output quality",
+                "Document best practices you discover in a prompts.md file"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "OpenAI Prompt Engineering Guide", "url": "https://platform.openai.com/docs/guides/prompt-engineering"},
+                {"title": "Anthropic Prompt Engineering", "url": "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering"},
+                {"title": "Brex Prompt Engineering Guide", "url": "https://github.com/brexhq/prompt-engineering"}
+              ]
+            },
+            {
+              "day": 7,
+              "title": "Few-Shot Learning & Examples",
+              "tasks": [
+                "Implement few-shot prompting with example injection",
+                "Create an example store that holds reusable few-shot examples per task type",
+                "Compare zero-shot vs few-shot performance on 3 different tasks",
+                "Implement dynamic example selection based on input similarity",
+                "Measure and log token usage differences between approaches"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "Few-Shot Prompting Guide", "url": "https://www.promptingguide.ai/techniques/fewshot"},
+                {"title": "tiktoken - OpenAI Token Counter", "url": "https://github.com/openai/tiktoken"},
+                {"title": "Anthropic Token Counting", "url": "https://docs.anthropic.com/en/docs/build-with-claude/token-counting"}
+              ]
+            },
+            {
+              "day": 8,
+              "title": "Chain-of-Thought & Structured Reasoning",
+              "tasks": [
+                "Implement chain-of-thought (CoT) prompting patterns",
+                "Compare direct answers vs CoT on reasoning tasks (math, logic, code)",
+                "Build a step-by-step reasoning extractor that parses CoT output",
+                "Implement self-consistency: run same prompt N times, pick majority answer",
+                "Create a reasoning evaluation script to score CoT quality"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "Chain-of-Thought Paper", "url": "https://arxiv.org/abs/2201.11903"},
+                {"title": "Self-Consistency Paper", "url": "https://arxiv.org/abs/2203.11171"},
+                {"title": "Prompting Guide - CoT", "url": "https://www.promptingguide.ai/techniques/cot"}
+              ]
+            },
+            {
+              "day": 9,
+              "title": "Conversation Memory & History",
+              "tasks": [
+                "Implement a ConversationMemory class with sliding window strategy",
+                "Add token-aware truncation (keep system prompt + recent messages within limit)",
+                "Implement conversation summarization (use LLM to summarize old messages)",
+                "Add conversation persistence to JSON files",
+                "Test memory strategies with a 20+ message conversation"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Managing Conversation History", "url": "https://cookbook.openai.com/examples/how_to_count_tokens_with_tiktoken"},
+                {"title": "Context Window Management", "url": "https://www.anthropic.com/news/100k-context-windows"},
+                {"title": "Conversation Memory Patterns", "url": "https://python.langchain.com/docs/concepts/memory/"}
+              ]
+            },
+            {
+              "day": 10,
+              "title": "Token Counting & Cost Tracking",
+              "tasks": [
+                "Implement token counting with tiktoken for OpenAI models",
+                "Build a cost calculator with per-model pricing (input/output tokens)",
+                "Create a usage tracker that logs every API call with cost",
+                "Add daily/weekly/monthly cost reports",
+                "Implement a budget limit feature that warns when approaching a threshold"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "OpenAI Pricing", "url": "https://openai.com/pricing"},
+                {"title": "Anthropic Pricing", "url": "https://www.anthropic.com/pricing"},
+                {"title": "tiktoken Library", "url": "https://github.com/openai/tiktoken"}
+              ]
+            }
+          ]
+        },
+        {
+          "weekNumber": 3,
+          "title": "Structured Generation & Local Models",
+          "concepts": ["function calling", "JSON mode", "streaming", "Ollama", "structured output"],
+          "days": [
+            {
+              "day": 11,
+              "title": "Function Calling (OpenAI)",
+              "tasks": [
+                "Read OpenAI function calling documentation thoroughly",
+                "Implement 3 tool definitions (web_search, calculator, file_reader)",
+                "Build a tool execution loop that handles function call responses",
+                "Handle parallel function calls and multiple tool results",
+                "Add error handling for malformed function calls"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "OpenAI Function Calling Guide", "url": "https://platform.openai.com/docs/guides/function-calling"},
+                {"title": "OpenAI Cookbook - Function Calling", "url": "https://cookbook.openai.com/examples/how_to_call_functions_with_chat_models"},
+                {"title": "JSON Schema Reference", "url": "https://json-schema.org/understanding-json-schema/"}
+              ]
+            },
+            {
+              "day": 12,
+              "title": "Tool Use (Anthropic)",
+              "tasks": [
+                "Read Anthropic tool use documentation",
+                "Implement the same 3 tools using Anthropic's tool use format",
+                "Compare OpenAI and Anthropic tool use APIs (format differences)",
+                "Unify tool definitions to work with both providers",
+                "Add tool use support to your provider abstraction layer"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "Anthropic Tool Use Guide", "url": "https://docs.anthropic.com/en/docs/build-with-claude/tool-use"},
+                {"title": "Anthropic Tool Use Examples", "url": "https://docs.anthropic.com/en/docs/build-with-claude/tool-use/overview"},
+                {"title": "Tool Use Best Practices", "url": "https://docs.anthropic.com/en/docs/build-with-claude/tool-use#best-practices"}
+              ]
+            },
+            {
+              "day": 13,
+              "title": "Structured Output & JSON Mode",
+              "tasks": [
+                "Implement JSON mode with OpenAI (response_format)",
+                "Use Pydantic models to validate LLM JSON output",
+                "Build a structured data extractor (extract entities from text into Pydantic models)",
+                "Handle partial/malformed JSON with retry logic",
+                "Compare structured output reliability across providers"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "OpenAI JSON Mode", "url": "https://platform.openai.com/docs/guides/structured-outputs"},
+                {"title": "Instructor Library", "url": "https://github.com/jxnl/instructor"},
+                {"title": "Pydantic JSON Schema", "url": "https://docs.pydantic.dev/latest/concepts/json_schema/"}
+              ]
+            },
+            {
+              "day": 14,
+              "title": "Streaming Responses",
+              "tasks": [
+                "Implement streaming with OpenAI SDK (iterate over chunks)",
+                "Implement streaming with Anthropic SDK",
+                "Build a rich terminal display for streamed output (using rich library)",
+                "Handle streaming errors and connection interruptions",
+                "Add streaming support to your unified provider interface"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "OpenAI Streaming Guide", "url": "https://platform.openai.com/docs/api-reference/streaming"},
+                {"title": "Anthropic Streaming Guide", "url": "https://docs.anthropic.com/en/api/streaming"},
+                {"title": "Rich Library - Live Display", "url": "https://rich.readthedocs.io/en/latest/live.html"}
+              ]
+            },
+            {
+              "day": 15,
+              "title": "Ollama & Local Models",
+              "tasks": [
+                "Install Ollama and pull 2-3 models (llama3, mistral, phi-3)",
+                "Make API calls to Ollama using its OpenAI-compatible endpoint",
+                "Add OllamaProvider to your abstraction layer",
+                "Compare local vs cloud model quality on 5 test prompts",
+                "Benchmark local model speed and resource usage"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "Ollama Documentation", "url": "https://ollama.com/"},
+                {"title": "Ollama API Reference", "url": "https://github.com/ollama/ollama/blob/main/docs/api.md"},
+                {"title": "Ollama Model Library", "url": "https://ollama.com/library"}
+              ]
+            }
+          ]
+        },
+        {
+          "weekNumber": 4,
+          "title": "CLI Tool Polish & Documentation",
+          "concepts": ["typer CLI", "testing", "documentation", "packaging", "CI/CD basics"],
+          "days": [
+            {
+              "day": 16,
+              "title": "Build the CLI with Typer",
+              "tasks": [
+                "Set up typer CLI with subcommands: chat, complete, config, history",
+                "Implement the 'chat' command with interactive mode",
+                "Add provider selection (--provider openai/anthropic/ollama) and model flags",
+                "Implement 'config' subcommand for managing API keys and defaults",
+                "Add rich formatting for CLI output (tables, panels, syntax highlighting)"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Typer Documentation", "url": "https://typer.tiangolo.com/"},
+                {"title": "Rich + Typer Integration", "url": "https://typer.tiangolo.com/tutorial/options/help/#rich-help"},
+                {"title": "CLI Design Guidelines", "url": "https://clig.dev/"}
+              ]
+            },
+            {
+              "day": 17,
+              "title": "Testing & Quality Assurance",
+              "tasks": [
+                "Write unit tests for all provider classes using pytest + mocking",
+                "Write integration tests for the CLI using typer.testing.CliRunner",
+                "Add test fixtures for common API responses",
+                "Set up pytest-cov for code coverage (target: 80%+)",
+                "Fix any bugs discovered during testing"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "pytest Documentation", "url": "https://docs.pytest.org/en/stable/"},
+                {"title": "pytest-mock", "url": "https://pytest-mock.readthedocs.io/en/latest/"},
+                {"title": "Testing Typer Applications", "url": "https://typer.tiangolo.com/tutorial/testing/"}
+              ]
+            },
+            {
+              "day": 18,
+              "title": "Error Handling & Robustness",
+              "tasks": [
+                "Implement comprehensive error handling with custom exception hierarchy",
+                "Add retry logic with exponential backoff for transient API errors",
+                "Implement graceful degradation (fallback to local model if cloud fails)",
+                "Add request/response logging for debugging",
+                "Test error scenarios: network failures, invalid keys, rate limits"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "tenacity - Retry Library", "url": "https://tenacity.readthedocs.io/en/latest/"},
+                {"title": "Python Logging Best Practices", "url": "https://docs.python.org/3/howto/logging.html"},
+                {"title": "Structlog", "url": "https://www.structlog.org/en/stable/"}
+              ]
+            },
+            {
+              "day": 19,
+              "title": "Documentation & Packaging",
+              "tasks": [
+                "Write a comprehensive README.md with installation, usage, and examples",
+                "Add inline docstrings to all public methods",
+                "Create a pyproject.toml for the project",
+                "Set up the project as an installable package",
+                "Record a short demo (using asciinema or screenshots)"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "Python Packaging Guide", "url": "https://packaging.python.org/en/latest/tutorials/packaging-projects/"},
+                {"title": "pyproject.toml Guide", "url": "https://packaging.python.org/en/latest/guides/writing-pyproject-toml/"},
+                {"title": "asciinema - Terminal Recorder", "url": "https://asciinema.org/"}
+              ]
+            },
+            {
+              "day": 20,
+              "title": "Month 1 Review & Retrospective",
+              "tasks": [
+                "Run all tests and ensure everything passes",
+                "Review your code for any remaining issues or improvements",
+                "Write a retrospective: key learnings, challenges, what you'd do differently",
+                "Push final code to GitHub with proper .gitignore and LICENSE",
+                "Preview Month 2 material and set up the RAG project skeleton"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "GitHub Repository Best Practices", "url": "https://docs.github.com/en/repositories/creating-and-managing-repositories/best-practices-for-repositories"},
+                {"title": "Choose a License", "url": "https://choosealicense.com/"},
+                {"title": "Conventional Commits", "url": "https://www.conventionalcommits.org/"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "RAG (Retrieval-Augmented Generation)",
+      "color": "#8b5cf6",
+      "project": {
+        "name": "DocuQuery - Document Q&A System",
+        "description": "Build a document Q&A system that ingests PDFs, HTML, and Markdown files, stores embeddings in ChromaDB, and answers questions with citations."
+      },
+      "weeks": [
+        {
+          "weekNumber": 5,
+          "title": "Embeddings & Vector Fundamentals",
+          "concepts": ["embeddings", "vector databases", "ChromaDB", "cosine similarity", "UMAP visualization"],
+          "days": [
+            {
+              "day": 21,
+              "title": "Understanding Embeddings",
+              "tasks": [
+                "Learn what embeddings are and why they matter for RAG",
+                "Generate embeddings using OpenAI's text-embedding-3-small model",
+                "Compute cosine similarity between pairs of sentences",
+                "Visualize embeddings in 2D using UMAP (10+ diverse sentences)",
+                "Compare embedding quality across different models"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "OpenAI Embeddings Guide", "url": "https://platform.openai.com/docs/guides/embeddings"},
+                {"title": "What Are Embeddings?", "url": "https://vickiboykis.com/what_are_embeddings/"},
+                {"title": "UMAP Documentation", "url": "https://umap-learn.readthedocs.io/en/latest/"}
+              ]
+            },
+            {
+              "day": 22,
+              "title": "ChromaDB Setup & Basics",
+              "tasks": [
+                "Install ChromaDB and create a persistent collection",
+                "Add documents with embeddings and metadata to ChromaDB",
+                "Query the collection with semantic search",
+                "Experiment with distance metrics (cosine, L2, inner product)",
+                "Implement metadata filtering on queries"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "ChromaDB Documentation", "url": "https://docs.trychroma.com/"},
+                {"title": "ChromaDB Getting Started", "url": "https://docs.trychroma.com/getting-started"},
+                {"title": "Vector Database Comparison", "url": "https://superlinked.com/vector-db-comparison"}
+              ]
+            },
+            {
+              "day": 23,
+              "title": "Local Embeddings & Alternatives",
+              "tasks": [
+                "Generate embeddings locally using sentence-transformers",
+                "Compare local vs OpenAI embeddings on retrieval quality",
+                "Benchmark embedding speed: local vs API (100 documents)",
+                "Test Ollama's embedding endpoint",
+                "Create an EmbeddingProvider abstraction (local + cloud)"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "Sentence Transformers", "url": "https://www.sbert.net/"},
+                {"title": "MTEB Leaderboard", "url": "https://huggingface.co/spaces/mteb/leaderboard"},
+                {"title": "Ollama Embeddings", "url": "https://ollama.com/blog/embedding-models"}
+              ]
+            },
+            {
+              "day": 24,
+              "title": "Similarity Search Deep Dive",
+              "tasks": [
+                "Implement cosine similarity, dot product, and L2 distance from scratch",
+                "Build a simple in-memory vector store (no external DB)",
+                "Compare your implementation with ChromaDB results",
+                "Implement approximate nearest neighbor with HNSW (via hnswlib)",
+                "Benchmark exact vs approximate search on 10K+ vectors"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "HNSW Algorithm Explained", "url": "https://www.pinecone.io/learn/series/faiss/hnsw/"},
+                {"title": "hnswlib Python", "url": "https://github.com/nmslib/hnswlib"},
+                {"title": "Similarity Search Fundamentals", "url": "https://www.pinecone.io/learn/what-is-similarity-search/"}
+              ]
+            },
+            {
+              "day": 25,
+              "title": "RAG Pipeline v1 - Basic Implementation",
+              "tasks": [
+                "Build a basic RAG pipeline: embed query → search ChromaDB → augment prompt → generate",
+                "Implement source attribution (return which documents were used)",
+                "Test with 20+ documents on a topic you know well",
+                "Measure retrieval precision: are the right documents being found?",
+                "Identify failure cases and document them"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "RAG from Scratch (LangChain)", "url": "https://github.com/langchain-ai/rag-from-scratch"},
+                {"title": "RAG Survey Paper", "url": "https://arxiv.org/abs/2312.10997"},
+                {"title": "Building RAG Applications", "url": "https://docs.anthropic.com/en/docs/build-with-claude/retrieval-augmented-generation"}
+              ]
+            }
+          ]
+        },
+        {
+          "weekNumber": 6,
+          "title": "Chunking & Document Processing",
+          "concepts": ["text chunking", "PDF parsing", "HTML extraction", "markdown processing", "metadata extraction"],
+          "days": [
+            {
+              "day": 26,
+              "title": "Chunking Strategies",
+              "tasks": [
+                "Implement fixed-size chunking with overlap",
+                "Implement recursive text splitting (by paragraph, sentence, word)",
+                "Implement semantic chunking (split at topic boundaries using embeddings)",
+                "Compare all three strategies on the same document (measure retrieval quality)",
+                "Create a Chunker interface with configurable parameters"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Text Splitting Strategies", "url": "https://www.pinecone.io/learn/chunking-strategies/"},
+                {"title": "LangChain Text Splitters", "url": "https://python.langchain.com/docs/concepts/text_splitters/"},
+                {"title": "Semantic Chunking", "url": "https://python.langchain.com/docs/how_to/semantic-chunker/"}
+              ]
+            },
+            {
+              "day": 27,
+              "title": "PDF Document Processing",
+              "tasks": [
+                "Parse PDFs with PyMuPDF (fitz) preserving structure",
+                "Extract text, tables, and metadata from PDFs",
+                "Handle multi-column layouts and headers/footers",
+                "Implement page-aware chunking (chunks don't span pages)",
+                "Test with 5+ different PDF types (academic papers, books, reports)"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "PyMuPDF Documentation", "url": "https://pymupdf.readthedocs.io/en/latest/"},
+                {"title": "unstructured Library", "url": "https://github.com/Unstructured-IO/unstructured"},
+                {"title": "PDF Processing Best Practices", "url": "https://unstructured-io.github.io/unstructured/"}
+              ]
+            },
+            {
+              "day": 28,
+              "title": "HTML & Web Content Processing",
+              "tasks": [
+                "Parse HTML with BeautifulSoup, extracting clean text",
+                "Implement a web scraper that respects robots.txt",
+                "Handle different content types: articles, docs, wikis",
+                "Extract metadata (title, author, date, headings hierarchy)",
+                "Implement readability-like content extraction (remove boilerplate)"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "BeautifulSoup Documentation", "url": "https://www.crummy.com/software/BeautifulSoup/bs4/doc/"},
+                {"title": "Trafilatura - Web Scraping", "url": "https://trafilatura.readthedocs.io/en/latest/"},
+                {"title": "Readability Algorithm", "url": "https://github.com/mozilla/readability"}
+              ]
+            },
+            {
+              "day": 29,
+              "title": "Markdown & Code Processing",
+              "tasks": [
+                "Parse Markdown files preserving heading hierarchy",
+                "Implement heading-aware chunking (chunks align with sections)",
+                "Handle code blocks specially (keep code together, add language metadata)",
+                "Process a GitHub repo's docs folder end-to-end",
+                "Build a unified DocumentProcessor that handles PDF/HTML/MD"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "markdown-it-py", "url": "https://github.com/executablebooks/markdown-it-py"},
+                {"title": "Tree-sitter for Code Parsing", "url": "https://tree-sitter.github.io/tree-sitter/"},
+                {"title": "Docling - Document Processing", "url": "https://github.com/DS4SD/docling"}
+              ]
+            },
+            {
+              "day": 30,
+              "title": "Document Ingestion Pipeline",
+              "tasks": [
+                "Build a full ingestion pipeline: load → extract → chunk → embed → store",
+                "Add progress tracking for large document sets",
+                "Implement deduplication (skip already-ingested documents by hash)",
+                "Add batch embedding (process chunks in batches for efficiency)",
+                "Test the pipeline with a mixed document corpus (50+ documents)"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Batch Processing Patterns", "url": "https://docs.python.org/3/library/concurrent.futures.html"},
+                {"title": "Content Hashing", "url": "https://docs.python.org/3/library/hashlib.html"},
+                {"title": "tqdm - Progress Bars", "url": "https://tqdm.github.io/"}
+              ]
+            }
+          ]
+        },
+        {
+          "weekNumber": 7,
+          "title": "Advanced Retrieval & Reranking",
+          "concepts": ["hybrid search", "BM25", "reranking", "cross-encoders", "query expansion"],
+          "days": [
+            {
+              "day": 31,
+              "title": "BM25 & Keyword Search",
+              "tasks": [
+                "Implement BM25 search using rank_bm25 library",
+                "Index your document corpus with BM25",
+                "Compare BM25 results with semantic search on the same queries",
+                "Identify queries where BM25 wins vs where semantic wins",
+                "Document the strengths and weaknesses of each approach"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "BM25 Algorithm Explained", "url": "https://www.pinecone.io/learn/okapi-bm25/"},
+                {"title": "rank_bm25 Library", "url": "https://github.com/dorianbrown/rank_bm25"},
+                {"title": "Keyword vs Semantic Search", "url": "https://www.pinecone.io/learn/semantic-search/"}
+              ]
+            },
+            {
+              "day": 32,
+              "title": "Hybrid Search (BM25 + Semantic)",
+              "tasks": [
+                "Implement Reciprocal Rank Fusion (RRF) to merge BM25 and semantic results",
+                "Experiment with different weight ratios (0.3/0.7, 0.5/0.5, 0.7/0.3)",
+                "Build a HybridRetriever class that combines both approaches",
+                "Evaluate hybrid search vs pure semantic on 20 test queries",
+                "Implement score normalization for combining different similarity metrics"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Reciprocal Rank Fusion", "url": "https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf"},
+                {"title": "Hybrid Search in Practice", "url": "https://www.pinecone.io/learn/hybrid-search-intro/"},
+                {"title": "Fusion Retrieval Techniques", "url": "https://weaviate.io/blog/hybrid-search-explained"}
+              ]
+            },
+            {
+              "day": 33,
+              "title": "Cross-Encoder Reranking",
+              "tasks": [
+                "Install and use a cross-encoder model (cross-encoder/ms-marco-MiniLM-L-6-v2)",
+                "Implement a two-stage retrieval pipeline: retrieve 20 → rerank to top 5",
+                "Compare results with and without reranking on 10 test queries",
+                "Implement Cohere Rerank API as an alternative",
+                "Benchmark reranking latency and quality trade-offs"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "Cross-Encoders for Reranking", "url": "https://www.sbert.net/examples/applications/cross-encoder/README.html"},
+                {"title": "Cohere Rerank", "url": "https://docs.cohere.com/docs/reranking"},
+                {"title": "Two-Stage Retrieval", "url": "https://www.pinecone.io/learn/series/rag/rerankers/"}
+              ]
+            },
+            {
+              "day": 34,
+              "title": "Query Enhancement",
+              "tasks": [
+                "Implement query expansion using LLM (generate 3 rephrasings of user query)",
+                "Implement HyDE (Hypothetical Document Embeddings)",
+                "Build a query router that classifies query type (factual, comparison, summary)",
+                "Add query preprocessing: spell correction, entity recognition",
+                "Compare retrieval quality with and without query enhancement"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "HyDE Paper", "url": "https://arxiv.org/abs/2212.10496"},
+                {"title": "Query Expansion Techniques", "url": "https://www.pinecone.io/learn/series/rag/query-expansion/"},
+                {"title": "Multi-Query Retrieval", "url": "https://python.langchain.com/docs/how_to/MultiQueryRetriever/"}
+              ]
+            },
+            {
+              "day": 35,
+              "title": "Advanced RAG Pipeline v2",
+              "tasks": [
+                "Integrate hybrid search + reranking + query enhancement into one pipeline",
+                "Implement context window packing (fit max relevant chunks in context)",
+                "Add answer confidence scoring (how well does the answer match the sources?)",
+                "Build a comparison benchmark: v1 (basic) vs v2 (advanced) pipeline",
+                "Document improvements with specific query examples"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Advanced RAG Techniques", "url": "https://arxiv.org/abs/2401.15884"},
+                {"title": "RAG Fusion", "url": "https://github.com/Raudaschl/RAG-Fusion"},
+                {"title": "Context Window Optimization", "url": "https://www.anthropic.com/news/long-context-prompting-for-claude-2-1"}
+              ]
+            }
+          ]
+        },
+        {
+          "weekNumber": 8,
+          "title": "Production RAG & Evaluation",
+          "concepts": ["RAGAS evaluation", "citations", "query routing", "caching", "monitoring"],
+          "days": [
+            {
+              "day": 36,
+              "title": "RAG Evaluation with RAGAS",
+              "tasks": [
+                "Install and set up RAGAS evaluation framework",
+                "Create a test dataset of 20+ question-answer-context triples",
+                "Evaluate your pipeline on: faithfulness, answer relevancy, context precision",
+                "Compare RAGAS scores between v1 and v2 pipelines",
+                "Identify and fix the lowest-scoring query categories"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "RAGAS Documentation", "url": "https://docs.ragas.io/en/stable/"},
+                {"title": "RAGAS Metrics Explained", "url": "https://docs.ragas.io/en/stable/concepts/metrics/index.html"},
+                {"title": "RAG Evaluation Best Practices", "url": "https://www.trulens.org/"}
+              ]
+            },
+            {
+              "day": 37,
+              "title": "Citation & Source Attribution",
+              "tasks": [
+                "Implement inline citations in generated answers ([1], [2], etc.)",
+                "Build a citation verification system (check if cited text exists in source)",
+                "Add source metadata display (document name, page number, relevance score)",
+                "Implement 'show sources' feature that displays retrieved chunks",
+                "Test citation accuracy on 10 queries"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "Anthropic Citation Guide", "url": "https://docs.anthropic.com/en/docs/build-with-claude/citations"},
+                {"title": "Verifiable RAG", "url": "https://arxiv.org/abs/2402.09760"},
+                {"title": "Attribution in LLMs", "url": "https://lilianweng.github.io/posts/2024-07-07-hallucination/"}
+              ]
+            },
+            {
+              "day": 38,
+              "title": "Query Routing & Multi-Index",
+              "tasks": [
+                "Create separate ChromaDB collections for different document types",
+                "Implement a query router that selects the best collection(s) per query",
+                "Add a 'global search' mode that searches across all collections",
+                "Implement collection-specific chunking strategies",
+                "Test routing accuracy on 15 diverse queries"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "Query Routing Patterns", "url": "https://python.langchain.com/docs/how_to/routing/"},
+                {"title": "Multi-Index RAG", "url": "https://docs.llamaindex.ai/en/stable/module_guides/querying/router/"},
+                {"title": "Semantic Router", "url": "https://github.com/aurelio-labs/semantic-router"}
+              ]
+            },
+            {
+              "day": 39,
+              "title": "DocuQuery - Final Assembly",
+              "tasks": [
+                "Integrate all components into the DocuQuery CLI/API",
+                "Add a Streamlit or Gradio UI for document upload and Q&A",
+                "Implement conversation mode (follow-up questions with context)",
+                "Add response caching for repeated queries",
+                "Write comprehensive tests for the full pipeline"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Streamlit Documentation", "url": "https://docs.streamlit.io/"},
+                {"title": "Gradio Documentation", "url": "https://www.gradio.app/docs/"},
+                {"title": "Caching Strategies", "url": "https://docs.python.org/3/library/functools.html#functools.lru_cache"}
+              ]
+            },
+            {
+              "day": 40,
+              "title": "Month 2 Review & Retrospective",
+              "tasks": [
+                "Run RAGAS evaluation on the final DocuQuery pipeline",
+                "Write a technical blog post about your RAG learnings",
+                "Clean up code, add docstrings, and ensure tests pass",
+                "Push to GitHub with a demo GIF/video",
+                "Preview Month 3 and set up the agents project skeleton"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "Technical Writing Guide", "url": "https://developers.google.com/tech-writing"},
+                {"title": "README Template", "url": "https://github.com/othneildrew/Best-README-Template"},
+                {"title": "GitHub Profile README", "url": "https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "AI Agents",
+      "color": "#ec4899",
+      "project": {
+        "name": "AgentForge - Multi-Agent Research Assistant",
+        "description": "Build a multi-agent system using LangGraph with web search, code execution, and collaborative research capabilities."
+      },
+      "weeks": [
+        {
+          "weekNumber": 9,
+          "title": "LangGraph Fundamentals",
+          "concepts": ["StateGraph", "nodes", "edges", "conditional routing", "persistence"],
+          "days": [
+            {
+              "day": 41,
+              "title": "LangGraph Core Concepts",
+              "tasks": [
+                "Install langgraph and understand the StateGraph model",
+                "Build a simple 3-node graph: input → process → output",
+                "Add conditional edges based on state values",
+                "Implement state typing with TypedDict",
+                "Visualize your graph using langgraph's built-in tools"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "LangGraph Documentation", "url": "https://langchain-ai.github.io/langgraph/"},
+                {"title": "LangGraph Quick Start", "url": "https://langchain-ai.github.io/langgraph/tutorials/introduction/"},
+                {"title": "LangGraph Concepts", "url": "https://langchain-ai.github.io/langgraph/concepts/"}
+              ]
+            },
+            {
+              "day": 42,
+              "title": "Agent Loop Pattern",
+              "tasks": [
+                "Implement the ReAct agent loop: think → act → observe → repeat",
+                "Build a simple agent that can use 2 tools (calculator, search stub)",
+                "Add proper stopping conditions (max iterations, task complete)",
+                "Implement state checkpointing for debugging",
+                "Test the agent on 5 different multi-step tasks"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "ReAct Pattern", "url": "https://arxiv.org/abs/2210.03629"},
+                {"title": "LangGraph ReAct Agent", "url": "https://langchain-ai.github.io/langgraph/how-tos/create-react-agent/"},
+                {"title": "Agent Architectures", "url": "https://blog.langchain.dev/what-is-an-agent/"}
+              ]
+            },
+            {
+              "day": 43,
+              "title": "State Management & Persistence",
+              "tasks": [
+                "Implement complex state with nested objects and lists",
+                "Add state reducers for accumulating results",
+                "Set up SQLite-based checkpointing for conversation persistence",
+                "Implement 'resume from checkpoint' functionality",
+                "Test state persistence across process restarts"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "LangGraph State Management", "url": "https://langchain-ai.github.io/langgraph/concepts/low_level/#state"},
+                {"title": "LangGraph Persistence", "url": "https://langchain-ai.github.io/langgraph/concepts/persistence/"},
+                {"title": "LangGraph Checkpointing", "url": "https://langchain-ai.github.io/langgraph/how-tos/persistence/"}
+              ]
+            },
+            {
+              "day": 44,
+              "title": "Streaming & Human-in-the-Loop",
+              "tasks": [
+                "Implement streaming of agent steps (not just final output)",
+                "Add human-in-the-loop approval before tool execution",
+                "Build an interrupt-and-resume flow for sensitive actions",
+                "Create a terminal UI that shows agent thinking in real-time",
+                "Test with a multi-step task requiring human approval"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "LangGraph Streaming", "url": "https://langchain-ai.github.io/langgraph/how-tos/streaming-tokens/"},
+                {"title": "Human-in-the-Loop", "url": "https://langchain-ai.github.io/langgraph/concepts/human_in_the_loop/"},
+                {"title": "LangGraph Breakpoints", "url": "https://langchain-ai.github.io/langgraph/how-tos/human_in_the_loop/breakpoints/"}
+              ]
+            },
+            {
+              "day": 45,
+              "title": "Graph Patterns & Subgraphs",
+              "tasks": [
+                "Implement a branching graph (parallel tool execution)",
+                "Build a subgraph for a reusable research subtask",
+                "Implement map-reduce pattern: split task → parallel execution → merge results",
+                "Add graph-level error handling with retry nodes",
+                "Benchmark single-thread vs parallel execution"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "LangGraph Subgraphs", "url": "https://langchain-ai.github.io/langgraph/how-tos/subgraph/"},
+                {"title": "Parallel Execution", "url": "https://langchain-ai.github.io/langgraph/how-tos/map-reduce/"},
+                {"title": "Error Handling in Graphs", "url": "https://langchain-ai.github.io/langgraph/how-tos/"}
+              ]
+            }
+          ]
+        },
+        {
+          "weekNumber": 10,
+          "title": "Tool Integration & MCP",
+          "concepts": ["custom tools", "MCP protocol", "web browsing", "code execution", "file operations"],
+          "days": [
+            {
+              "day": 46,
+              "title": "Building Custom Tools",
+              "tasks": [
+                "Create 5 custom tools with proper schemas: web_search, read_file, write_file, run_python, wikipedia",
+                "Implement tool input validation and error handling",
+                "Add tool execution sandboxing for code execution",
+                "Build a tool registry for dynamic tool discovery",
+                "Test each tool independently with various inputs"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "LangGraph Tool Use", "url": "https://langchain-ai.github.io/langgraph/how-tos/tool-calling/"},
+                {"title": "Building Tools for LLMs", "url": "https://docs.anthropic.com/en/docs/build-with-claude/tool-use"},
+                {"title": "Tool Design Patterns", "url": "https://platform.openai.com/docs/guides/function-calling"}
+              ]
+            },
+            {
+              "day": 47,
+              "title": "Model Context Protocol (MCP) Basics",
+              "tasks": [
+                "Understand MCP architecture: hosts, clients, servers",
+                "Set up the MCP Python SDK",
+                "Build a simple MCP server that exposes 2 tools",
+                "Connect your agent to the MCP server as a client",
+                "Test end-to-end tool invocation through MCP"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "MCP Documentation", "url": "https://modelcontextprotocol.io/introduction"},
+                {"title": "MCP Python SDK", "url": "https://github.com/modelcontextprotocol/python-sdk"},
+                {"title": "MCP Specification", "url": "https://spec.modelcontextprotocol.io/specification/"}
+              ]
+            },
+            {
+              "day": 48,
+              "title": "Web Browsing Agent",
+              "tasks": [
+                "Build a web browsing tool using httpx + BeautifulSoup",
+                "Implement content extraction and summarization",
+                "Create a multi-step web research agent that follows links",
+                "Add URL validation and rate limiting",
+                "Test on 3 research tasks requiring multiple web pages"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "httpx Documentation", "url": "https://www.python-httpx.org/"},
+                {"title": "Web Scraping Ethics", "url": "https://www.scrapingbee.com/blog/web-scraping-best-practices/"},
+                {"title": "Playwright for Python", "url": "https://playwright.dev/python/"}
+              ]
+            },
+            {
+              "day": 49,
+              "title": "Code Execution Agent",
+              "tasks": [
+                "Build a sandboxed Python code execution tool (subprocess with timeout)",
+                "Create a code-writing agent that generates and tests code",
+                "Implement iterative debugging: run code → fix errors → retry",
+                "Add output capture and analysis",
+                "Test with 5 coding tasks of varying complexity"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Python subprocess", "url": "https://docs.python.org/3/library/subprocess.html"},
+                {"title": "Code Execution Safety", "url": "https://docs.python.org/3/library/ast.html#ast.literal_eval"},
+                {"title": "Docker SDK for Python", "url": "https://docker-py.readthedocs.io/en/stable/"}
+              ]
+            },
+            {
+              "day": 50,
+              "title": "Building an MCP Server",
+              "tasks": [
+                "Build a full MCP server with 5+ tools (files, search, database, code exec, notes)",
+                "Add resource exposure through MCP (share context/files)",
+                "Implement prompt templates in MCP",
+                "Test the MCP server with Claude Desktop or your own client",
+                "Document the MCP server's capabilities and setup"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "MCP Server Guide", "url": "https://modelcontextprotocol.io/quickstart/server"},
+                {"title": "MCP Resources", "url": "https://modelcontextprotocol.io/docs/concepts/resources"},
+                {"title": "MCP Prompts", "url": "https://modelcontextprotocol.io/docs/concepts/prompts"}
+              ]
+            }
+          ]
+        },
+        {
+          "weekNumber": 11,
+          "title": "Multi-Agent Patterns",
+          "concepts": ["supervisor pattern", "worker agents", "handoffs", "shared state", "debate"],
+          "days": [
+            {
+              "day": 51,
+              "title": "Supervisor-Worker Architecture",
+              "tasks": [
+                "Implement a supervisor agent that delegates to specialist workers",
+                "Create 3 worker agents: researcher, writer, critic",
+                "Build the routing logic for task delegation",
+                "Implement result aggregation from multiple workers",
+                "Test on a research task requiring all three workers"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Multi-Agent Supervisor", "url": "https://langchain-ai.github.io/langgraph/tutorials/multi_agent/agent_supervisor/"},
+                {"title": "Multi-Agent Architectures", "url": "https://langchain-ai.github.io/langgraph/concepts/multi_agent/"},
+                {"title": "Agent Team Patterns", "url": "https://blog.langchain.dev/langgraph-multi-agent-workflows/"}
+              ]
+            },
+            {
+              "day": 52,
+              "title": "Agent Handoffs & Swarm Pattern",
+              "tasks": [
+                "Implement agent handoff mechanism (agent A transfers control to agent B)",
+                "Build a swarm of 3 specialized agents with handoff rules",
+                "Add context passing during handoffs (transfer relevant state)",
+                "Implement handoff logging and tracing",
+                "Test a customer support scenario with handoffs between departments"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Agent Handoffs", "url": "https://langchain-ai.github.io/langgraph/how-tos/agent-handoffs/"},
+                {"title": "OpenAI Swarm (Reference)", "url": "https://github.com/openai/swarm"},
+                {"title": "Handoff Patterns", "url": "https://langchain-ai.github.io/langgraph/concepts/multi_agent/#handoffs"}
+              ]
+            },
+            {
+              "day": 53,
+              "title": "Shared State & Communication",
+              "tasks": [
+                "Implement a shared memory/blackboard for multi-agent communication",
+                "Build a message passing system between agents",
+                "Create a shared knowledge base that agents can read/write",
+                "Implement conflict resolution when agents disagree",
+                "Test collaborative document writing with 2 agents"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Shared State in LangGraph", "url": "https://langchain-ai.github.io/langgraph/concepts/low_level/#state"},
+                {"title": "Blackboard Pattern", "url": "https://en.wikipedia.org/wiki/Blackboard_(design_pattern)"},
+                {"title": "Multi-Agent Communication", "url": "https://langchain-ai.github.io/langgraph/tutorials/multi_agent/"}
+              ]
+            },
+            {
+              "day": 54,
+              "title": "Debate & Verification Agents",
+              "tasks": [
+                "Implement a debate pattern: proposer vs critic with a judge",
+                "Build a fact-checking agent that verifies claims with sources",
+                "Create a verification pipeline: generate → verify → revise",
+                "Add confidence scoring based on verification results",
+                "Test on 5 questions where accuracy is critical"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "LLM Debate Paper", "url": "https://arxiv.org/abs/2305.14325"},
+                {"title": "Self-Verification", "url": "https://arxiv.org/abs/2212.09561"},
+                {"title": "Constitutional AI", "url": "https://arxiv.org/abs/2212.08073"}
+              ]
+            },
+            {
+              "day": 55,
+              "title": "AgentForge - Research Pipeline",
+              "tasks": [
+                "Combine all patterns into the AgentForge research assistant",
+                "Implement a research workflow: question → plan → research → synthesize → verify",
+                "Add a report generation step that produces structured output",
+                "Implement progress tracking for long-running research tasks",
+                "Test with 3 complex research questions"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "GPT Researcher", "url": "https://github.com/assafelovic/gpt-researcher"},
+                {"title": "Research Agent Patterns", "url": "https://blog.langchain.dev/plan-and-execute-agents/"},
+                {"title": "Storm - Research Agent", "url": "https://github.com/stanford-oval/storm"}
+              ]
+            }
+          ]
+        },
+        {
+          "weekNumber": 12,
+          "title": "Reliable Agents & Production",
+          "concepts": ["error recovery", "observability", "guardrails", "evaluation", "deployment"],
+          "days": [
+            {
+              "day": 56,
+              "title": "Error Recovery & Resilience",
+              "tasks": [
+                "Implement retry logic for failed tool executions",
+                "Add fallback strategies (alternative tools, simpler approaches)",
+                "Build a self-healing agent that adapts when a tool is unavailable",
+                "Implement timeout handling for long-running tool calls",
+                "Test resilience by simulating tool failures"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "LangGraph Error Handling", "url": "https://langchain-ai.github.io/langgraph/how-tos/"},
+                {"title": "Resilience Patterns", "url": "https://docs.microsoft.com/en-us/azure/architecture/patterns/retry"},
+                {"title": "Circuit Breaker Pattern", "url": "https://docs.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker"}
+              ]
+            },
+            {
+              "day": 57,
+              "title": "Agent Observability",
+              "tasks": [
+                "Add structured logging to all agent actions",
+                "Implement tracing with LangSmith or custom tracing",
+                "Build a dashboard showing agent step-by-step execution",
+                "Add cost tracking per agent run (token usage, API calls)",
+                "Create alerts for anomalous agent behavior (loops, excessive tool calls)"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "LangSmith Documentation", "url": "https://docs.smith.langchain.com/"},
+                {"title": "Agent Observability", "url": "https://docs.smith.langchain.com/observability"},
+                {"title": "OpenTelemetry Python", "url": "https://opentelemetry.io/docs/languages/python/"}
+              ]
+            },
+            {
+              "day": 58,
+              "title": "Agent Evaluation & Testing",
+              "tasks": [
+                "Create a test suite of 20 tasks with expected outcomes",
+                "Implement automated agent evaluation (task completion rate, accuracy)",
+                "Build regression tests for critical agent paths",
+                "Measure and optimize agent latency and cost",
+                "Compare agent performance across different LLM backends"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Agent Evaluation", "url": "https://docs.smith.langchain.com/evaluation"},
+                {"title": "LangSmith Evaluation", "url": "https://docs.smith.langchain.com/evaluation/quickstart"},
+                {"title": "Agent Benchmarks", "url": "https://github.com/princeton-nlp/SWE-bench"}
+              ]
+            },
+            {
+              "day": 59,
+              "title": "AgentForge - Final Polish",
+              "tasks": [
+                "Integrate all reliability features into AgentForge",
+                "Add a configuration system for agent behavior tuning",
+                "Write comprehensive documentation and usage examples",
+                "Create demo scripts showing different agent capabilities",
+                "Record a demo video of the multi-agent research pipeline"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "LangGraph Deploy", "url": "https://langchain-ai.github.io/langgraph/cloud/"},
+                {"title": "Agent Documentation Best Practices", "url": "https://diataxis.fr/"},
+                {"title": "asciinema", "url": "https://asciinema.org/"}
+              ]
+            },
+            {
+              "day": 60,
+              "title": "Month 3 Review & Retrospective",
+              "tasks": [
+                "Run full evaluation suite on AgentForge",
+                "Write a retrospective comparing agent patterns (supervisor vs swarm vs debate)",
+                "Clean up code and ensure all tests pass",
+                "Push to GitHub with comprehensive README",
+                "Preview Month 4 and set up fine-tuning environment"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "Agent Design Patterns Survey", "url": "https://arxiv.org/abs/2308.08155"},
+                {"title": "GitHub Actions for Python", "url": "https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python"},
+                {"title": "Fine-Tuning Overview", "url": "https://huggingface.co/docs/transformers/training"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Fine-Tuning & Customization",
+      "color": "#f59e0b",
+      "project": {
+        "name": "TunedAssist - Domain-Specific Assistant",
+        "description": "Fine-tune a language model for a specific domain using LoRA/QLoRA, with evaluation benchmarks and safety guardrails."
+      },
+      "weeks": [
+        {
+          "weekNumber": 13,
+          "title": "Fine-Tuning Fundamentals",
+          "concepts": ["SFT", "datasets", "HF Transformers", "tokenization", "training loops"],
+          "days": [
+            {
+              "day": 61,
+              "title": "Fine-Tuning Theory & Setup",
+              "tasks": [
+                "Study when and why to fine-tune vs prompt engineering vs RAG",
+                "Set up HuggingFace Transformers and datasets libraries",
+                "Understand the SFT (Supervised Fine-Tuning) process end-to-end",
+                "Explore HuggingFace Hub for base models and datasets",
+                "Install and verify GPU/MPS support (or set up cloud GPU)"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "HuggingFace Transformers", "url": "https://huggingface.co/docs/transformers/"},
+                {"title": "When to Fine-Tune", "url": "https://platform.openai.com/docs/guides/fine-tuning/when-to-use-fine-tuning"},
+                {"title": "SFT Trainer Guide", "url": "https://huggingface.co/docs/trl/sft_trainer"}
+              ]
+            },
+            {
+              "day": 62,
+              "title": "Dataset Preparation",
+              "tasks": [
+                "Choose a domain for your TunedAssist project (e.g., medical, legal, technical docs)",
+                "Collect and clean 500+ training examples in chat format",
+                "Format data into the chat template format (system/user/assistant)",
+                "Split into train/validation/test sets (80/10/10)",
+                "Upload your dataset to HuggingFace Hub (private)"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "HuggingFace Datasets", "url": "https://huggingface.co/docs/datasets/"},
+                {"title": "Chat Templates", "url": "https://huggingface.co/docs/transformers/main/chat_templating"},
+                {"title": "Data Quality for Fine-Tuning", "url": "https://huggingface.co/blog/synthetic-data-save-costs"}
+              ]
+            },
+            {
+              "day": 63,
+              "title": "Tokenization Deep Dive",
+              "tasks": [
+                "Study BPE, WordPiece, and SentencePiece tokenization algorithms",
+                "Analyze tokenization of your domain-specific data (check for issues)",
+                "Implement a data collator for chat-format training",
+                "Understand attention masks, padding, and truncation",
+                "Benchmark tokenization speed for your dataset"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "HuggingFace Tokenizers", "url": "https://huggingface.co/docs/tokenizers/"},
+                {"title": "Tokenization Explained", "url": "https://huggingface.co/learn/nlp-course/chapter6/1"},
+                {"title": "Andrej Karpathy - Tokenization", "url": "https://www.youtube.com/watch?v=zduSFxRajkE"}
+              ]
+            },
+            {
+              "day": 64,
+              "title": "First Fine-Tuning Run",
+              "tasks": [
+                "Fine-tune a small model (TinyLlama or Phi-2) on your dataset using SFTTrainer",
+                "Configure training hyperparameters (lr, batch_size, epochs, warmup)",
+                "Monitor training loss and validation loss",
+                "Generate sample outputs at checkpoints during training",
+                "Compare base model vs fine-tuned model on 10 test prompts"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "SFTTrainer Documentation", "url": "https://huggingface.co/docs/trl/sft_trainer"},
+                {"title": "Training Arguments", "url": "https://huggingface.co/docs/transformers/main_classes/trainer#transformers.TrainingArguments"},
+                {"title": "Weights & Biases Integration", "url": "https://docs.wandb.ai/guides/integrations/huggingface/"}
+              ]
+            },
+            {
+              "day": 65,
+              "title": "Training Analysis & Debugging",
+              "tasks": [
+                "Analyze training curves (loss, learning rate schedule)",
+                "Identify and fix common issues: overfitting, underfitting, catastrophic forgetting",
+                "Experiment with different learning rates (1e-5 to 5e-4)",
+                "Implement early stopping based on validation loss",
+                "Document your training experiments and results"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "Debugging Training", "url": "https://huggingface.co/docs/transformers/debugging"},
+                {"title": "Learning Rate Schedules", "url": "https://huggingface.co/docs/transformers/main_classes/optimizer_schedules"},
+                {"title": "Catastrophic Forgetting", "url": "https://arxiv.org/abs/1612.00796"}
+              ]
+            }
+          ]
+        },
+        {
+          "weekNumber": 14,
+          "title": "LoRA & PEFT",
+          "concepts": ["LoRA", "QLoRA", "PEFT", "Unsloth", "adapter merging"],
+          "days": [
+            {
+              "day": 66,
+              "title": "LoRA Theory & Implementation",
+              "tasks": [
+                "Study the LoRA paper: understand rank, alpha, and target modules",
+                "Install PEFT library and configure LoRA for your model",
+                "Fine-tune with LoRA: compare training speed and memory vs full fine-tuning",
+                "Experiment with different ranks (4, 8, 16, 32) and alpha values",
+                "Compare LoRA model quality vs full fine-tuning on your test set"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "LoRA Paper", "url": "https://arxiv.org/abs/2106.09685"},
+                {"title": "PEFT Documentation", "url": "https://huggingface.co/docs/peft/"},
+                {"title": "LoRA Guide", "url": "https://huggingface.co/docs/peft/conceptual_guides/lora"}
+              ]
+            },
+            {
+              "day": 67,
+              "title": "QLoRA & Memory Optimization",
+              "tasks": [
+                "Study QLoRA: 4-bit quantization + LoRA",
+                "Install bitsandbytes and configure 4-bit loading",
+                "Fine-tune a 7B model with QLoRA (should fit in 6-8GB VRAM)",
+                "Compare QLoRA vs LoRA quality and training speed",
+                "Measure peak memory usage during training"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "QLoRA Paper", "url": "https://arxiv.org/abs/2305.14314"},
+                {"title": "bitsandbytes", "url": "https://github.com/TimDettmers/bitsandbytes"},
+                {"title": "QLoRA Tutorial", "url": "https://huggingface.co/blog/4bit-transformers-bitsandbytes"}
+              ]
+            },
+            {
+              "day": 68,
+              "title": "Unsloth for Fast Training",
+              "tasks": [
+                "Install Unsloth and understand its optimizations",
+                "Fine-tune the same model using Unsloth and compare training speed",
+                "Use Unsloth's built-in data formatting helpers",
+                "Export the model in different formats (GGUF, HF format)",
+                "Compare Unsloth vs standard HF training on speed and quality"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Unsloth Documentation", "url": "https://github.com/unslothai/unsloth"},
+                {"title": "Unsloth Wiki", "url": "https://docs.unsloth.ai/"},
+                {"title": "GGUF Format", "url": "https://github.com/ggerganov/ggml/blob/master/docs/gguf.md"}
+              ]
+            },
+            {
+              "day": 69,
+              "title": "Adapter Management & Merging",
+              "tasks": [
+                "Train multiple LoRA adapters for different sub-tasks",
+                "Implement adapter switching at inference time",
+                "Merge LoRA weights into the base model",
+                "Compare merged model vs adapter-based inference (speed, quality)",
+                "Build an adapter registry for managing multiple fine-tunes"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "PEFT Adapter Merging", "url": "https://huggingface.co/docs/peft/developer_guides/model_merging"},
+                {"title": "Model Merging Techniques", "url": "https://huggingface.co/blog/mlabonne/merge-models"},
+                {"title": "Multiple Adapters", "url": "https://huggingface.co/docs/peft/developer_guides/low_level_api"}
+              ]
+            },
+            {
+              "day": 70,
+              "title": "Serving Fine-Tuned Models",
+              "tasks": [
+                "Serve your fine-tuned model with Ollama (convert to GGUF → import)",
+                "Set up vLLM for production-grade serving",
+                "Compare serving options: Ollama vs vLLM vs HF TGI",
+                "Benchmark inference speed and throughput",
+                "Create an API endpoint for your fine-tuned model"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "vLLM Documentation", "url": "https://docs.vllm.ai/en/latest/"},
+                {"title": "Ollama Modelfile", "url": "https://github.com/ollama/ollama/blob/main/docs/modelfile.md"},
+                {"title": "HuggingFace TGI", "url": "https://huggingface.co/docs/text-generation-inference/"}
+              ]
+            }
+          ]
+        },
+        {
+          "weekNumber": 15,
+          "title": "Evaluation & Benchmarking",
+          "concepts": ["LLM-as-judge", "benchmarks", "A/B testing", "human evaluation", "metrics"],
+          "days": [
+            {
+              "day": 71,
+              "title": "LLM-as-Judge Evaluation",
+              "tasks": [
+                "Implement LLM-as-judge evaluation using a strong model (GPT-4/Claude) as evaluator",
+                "Create evaluation rubrics for your domain (accuracy, helpfulness, safety)",
+                "Build a pairwise comparison framework (model A vs model B)",
+                "Run evaluation on 50 test prompts with automated scoring",
+                "Analyze inter-rater reliability between LLM judge and your manual scoring"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "LLM-as-Judge Paper", "url": "https://arxiv.org/abs/2306.05685"},
+                {"title": "Chatbot Arena", "url": "https://chat.lmsys.org/"},
+                {"title": "AlpacaEval", "url": "https://github.com/tatsu-lab/alpaca_eval"}
+              ]
+            },
+            {
+              "day": 72,
+              "title": "Custom Benchmarks",
+              "tasks": [
+                "Create a domain-specific benchmark suite (30+ test cases)",
+                "Implement automated scoring for your benchmark",
+                "Run the benchmark against base model, fine-tuned, and GPT-4/Claude",
+                "Generate a comparison report with tables and charts",
+                "Identify remaining weaknesses and create targeted training data"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "LM Evaluation Harness", "url": "https://github.com/EleutherAI/lm-evaluation-harness"},
+                {"title": "HELM Benchmark", "url": "https://crfm.stanford.edu/helm/latest/"},
+                {"title": "Custom Evaluation Design", "url": "https://huggingface.co/docs/evaluate/"}
+              ]
+            },
+            {
+              "day": 73,
+              "title": "A/B Testing Framework",
+              "tasks": [
+                "Build an A/B testing framework for comparing model versions",
+                "Implement blind evaluation (hide which model generated which response)",
+                "Create a simple web UI for human evaluation of A/B tests",
+                "Collect and analyze 20+ human judgments",
+                "Calculate statistical significance of A/B test results"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "A/B Testing for ML Models", "url": "https://neptune.ai/blog/ml-model-testing"},
+                {"title": "Statistical Significance", "url": "https://docs.scipy.org/doc/scipy/reference/stats.html"},
+                {"title": "Human Evaluation Best Practices", "url": "https://arxiv.org/abs/2006.11239"}
+              ]
+            },
+            {
+              "day": 74,
+              "title": "Iterative Improvement",
+              "tasks": [
+                "Analyze evaluation results to identify failure modes",
+                "Create targeted training data for weak areas (data augmentation)",
+                "Re-train with the improved dataset",
+                "Run evaluation again and compare with previous version",
+                "Document the improvement cycle and results"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Data-Centric AI", "url": "https://dcai.csail.mit.edu/"},
+                {"title": "Synthetic Data Generation", "url": "https://huggingface.co/blog/synthetic-data-save-costs"},
+                {"title": "Active Learning", "url": "https://modal.com/blog/active-learning"}
+              ]
+            },
+            {
+              "day": 75,
+              "title": "DPO & Preference Tuning",
+              "tasks": [
+                "Study DPO (Direct Preference Optimization) theory",
+                "Create a preference dataset (chosen vs rejected pairs)",
+                "Run DPO training on your fine-tuned model",
+                "Compare SFT-only vs SFT+DPO on evaluation benchmarks",
+                "Document when DPO helps vs when it doesn't"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "DPO Paper", "url": "https://arxiv.org/abs/2305.18290"},
+                {"title": "TRL DPO Trainer", "url": "https://huggingface.co/docs/trl/dpo_trainer"},
+                {"title": "RLHF vs DPO", "url": "https://huggingface.co/blog/dpo-trl"}
+              ]
+            }
+          ]
+        },
+        {
+          "weekNumber": 16,
+          "title": "Guardrails & Safety",
+          "concepts": ["guardrails", "prompt injection", "content filtering", "red-teaming", "safety"],
+          "days": [
+            {
+              "day": 76,
+              "title": "NeMo Guardrails Setup",
+              "tasks": [
+                "Install NVIDIA NeMo Guardrails",
+                "Create guardrails config for your TunedAssist domain",
+                "Implement input rails (block harmful queries, detect off-topic)",
+                "Implement output rails (ensure responses are safe and on-topic)",
+                "Test guardrails with 20 adversarial prompts"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "NeMo Guardrails", "url": "https://github.com/NVIDIA/NeMo-Guardrails"},
+                {"title": "NeMo Guardrails Docs", "url": "https://docs.nvidia.com/nemo/guardrails/"},
+                {"title": "AI Safety Overview", "url": "https://arxiv.org/abs/2309.07045"}
+              ]
+            },
+            {
+              "day": 77,
+              "title": "Prompt Injection Defense",
+              "tasks": [
+                "Study common prompt injection techniques",
+                "Implement input sanitization and injection detection",
+                "Build a prompt injection classifier using a fine-tuned model",
+                "Test your defenses against 15 known injection patterns",
+                "Create a defense-in-depth strategy (multiple layers of protection)"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Prompt Injection Attacks", "url": "https://simonwillison.net/2023/Apr/14/worst-that-can-happen/"},
+                {"title": "OWASP LLM Top 10", "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/"},
+                {"title": "Rebuff - Prompt Injection Detector", "url": "https://github.com/protectai/rebuff"}
+              ]
+            },
+            {
+              "day": 78,
+              "title": "Red-Teaming Your Model",
+              "tasks": [
+                "Develop a red-teaming checklist for your domain",
+                "Perform manual red-teaming (20 adversarial scenarios)",
+                "Use an LLM to generate additional red-team prompts",
+                "Document all vulnerabilities found",
+                "Implement fixes for each vulnerability"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Red-Teaming LLMs", "url": "https://huggingface.co/blog/red-teaming"},
+                {"title": "AI Red-Teaming Guide", "url": "https://www.anthropic.com/news/evaluating-ai-systems"},
+                {"title": "Garak - LLM Vulnerability Scanner", "url": "https://github.com/leondz/garak"}
+              ]
+            },
+            {
+              "day": 79,
+              "title": "TunedAssist - Final Assembly",
+              "tasks": [
+                "Integrate guardrails into the TunedAssist inference pipeline",
+                "Add a feedback collection mechanism for continuous improvement",
+                "Write comprehensive documentation (model card, usage guide)",
+                "Create a Gradio demo with guardrails visualization",
+                "Run final evaluation and red-teaming pass"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Model Cards", "url": "https://huggingface.co/docs/hub/model-cards"},
+                {"title": "Responsible AI Practices", "url": "https://ai.google/responsibility/responsible-ai-practices/"},
+                {"title": "Gradio Blocks", "url": "https://www.gradio.app/docs/gradio/blocks"}
+              ]
+            },
+            {
+              "day": 80,
+              "title": "Month 4 Review & Retrospective",
+              "tasks": [
+                "Run final benchmarks: base vs fine-tuned vs fine-tuned+DPO",
+                "Write a model card documenting capabilities, limitations, and safety",
+                "Clean up code and push to GitHub",
+                "Write a retrospective on fine-tuning learnings",
+                "Preview Month 5 and set up the production project"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "Model Card Template", "url": "https://huggingface.co/docs/hub/model-card-annotated"},
+                {"title": "ML Project Checklist", "url": "https://www.fast.ai/posts/2020-01-07-data-questionnaire.html"},
+                {"title": "Production ML Overview", "url": "https://madewithml.com/"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Production AI Systems",
+      "color": "#10b981",
+      "project": {
+        "name": "ProdRAG - Production RAG API",
+        "description": "Build and deploy a production-grade RAG API with monitoring, caching, load testing, and CI/CD."
+      },
+      "weeks": [
+        {
+          "weekNumber": 17,
+          "title": "API Design & Deployment",
+          "concepts": ["FastAPI", "Docker", "cloud deployment", "API design", "authentication"],
+          "days": [
+            {
+              "day": 81,
+              "title": "FastAPI Application Structure",
+              "tasks": [
+                "Set up FastAPI project with proper directory structure",
+                "Implement health check, version, and docs endpoints",
+                "Create Pydantic models for API request/response schemas",
+                "Add CORS, rate limiting, and request validation middleware",
+                "Write OpenAPI documentation with examples"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "FastAPI Documentation", "url": "https://fastapi.tiangolo.com/"},
+                {"title": "FastAPI Best Practices", "url": "https://github.com/zhanymkanov/fastapi-best-practices"},
+                {"title": "API Design Guide", "url": "https://cloud.google.com/apis/design"}
+              ]
+            },
+            {
+              "day": 82,
+              "title": "RAG API Endpoints",
+              "tasks": [
+                "Implement /ingest endpoint (upload and process documents)",
+                "Implement /query endpoint (RAG query with citations)",
+                "Implement /collections endpoint (manage document collections)",
+                "Add streaming response support for long answers",
+                "Write integration tests for all endpoints"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "FastAPI Streaming", "url": "https://fastapi.tiangolo.com/advanced/custom-response/#streamingresponse"},
+                {"title": "FastAPI Testing", "url": "https://fastapi.tiangolo.com/tutorial/testing/"},
+                {"title": "REST API Best Practices", "url": "https://stackoverflow.blog/2020/03/02/best-practices-for-rest-api-design/"}
+              ]
+            },
+            {
+              "day": 83,
+              "title": "Authentication & Security",
+              "tasks": [
+                "Implement API key authentication",
+                "Add JWT-based user authentication",
+                "Set up role-based access control (admin, user, readonly)",
+                "Implement input sanitization for security",
+                "Write security tests (injection, auth bypass, rate limit)"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "FastAPI Security", "url": "https://fastapi.tiangolo.com/tutorial/security/"},
+                {"title": "JWT Best Practices", "url": "https://auth0.com/blog/a-look-at-the-latest-draft-for-jwt-bcp/"},
+                {"title": "OWASP API Security", "url": "https://owasp.org/www-project-api-security/"}
+              ]
+            },
+            {
+              "day": 84,
+              "title": "Docker & Containerization",
+              "tasks": [
+                "Write a multi-stage Dockerfile for the FastAPI app",
+                "Create docker-compose.yml with app + ChromaDB + Redis services",
+                "Implement health checks in Docker Compose",
+                "Optimize Docker image size (target under 500MB)",
+                "Test the full stack locally with docker-compose up"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Docker Best Practices", "url": "https://docs.docker.com/build/building/best-practices/"},
+                {"title": "Docker Compose", "url": "https://docs.docker.com/compose/"},
+                {"title": "Multi-Stage Builds", "url": "https://docs.docker.com/build/building/multi-stage/"}
+              ]
+            },
+            {
+              "day": 85,
+              "title": "Cloud Deployment",
+              "tasks": [
+                "Choose a deployment target (Railway, Fly.io, AWS ECS, or GCP Cloud Run)",
+                "Deploy the containerized application",
+                "Set up environment variables and secrets management",
+                "Configure a custom domain (optional) and HTTPS",
+                "Test the deployed API with curl and your test suite"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Railway Deployment", "url": "https://docs.railway.app/"},
+                {"title": "Fly.io Documentation", "url": "https://fly.io/docs/"},
+                {"title": "AWS ECS Guide", "url": "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/"}
+              ]
+            }
+          ]
+        },
+        {
+          "weekNumber": 18,
+          "title": "Observability & Monitoring",
+          "concepts": ["OpenTelemetry", "metrics", "logging", "tracing", "alerting"],
+          "days": [
+            {
+              "day": 86,
+              "title": "Structured Logging",
+              "tasks": [
+                "Set up structlog with JSON output format",
+                "Add request ID tracking across the full request lifecycle",
+                "Implement log levels appropriately (DEBUG, INFO, WARNING, ERROR)",
+                "Add LLM-specific logging (model, tokens, latency, cost)",
+                "Set up log aggregation (Loki, CloudWatch, or file-based)"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "structlog Documentation", "url": "https://www.structlog.org/en/stable/"},
+                {"title": "Python Logging Best Practices", "url": "https://docs.python.org/3/howto/logging-cookbook.html"},
+                {"title": "12-Factor Logging", "url": "https://12factor.net/logs"}
+              ]
+            },
+            {
+              "day": 87,
+              "title": "OpenTelemetry Tracing",
+              "tasks": [
+                "Install OpenTelemetry Python SDK",
+                "Instrument FastAPI with automatic tracing",
+                "Add custom spans for RAG pipeline steps (embed, retrieve, rerank, generate)",
+                "Set up Jaeger or Zipkin for trace visualization",
+                "Trace a full RAG query and analyze the waterfall view"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "OpenTelemetry Python", "url": "https://opentelemetry.io/docs/languages/python/"},
+                {"title": "FastAPI + OTel", "url": "https://opentelemetry-python-contrib.readthedocs.io/en/latest/instrumentation/fastapi/fastapi.html"},
+                {"title": "Jaeger Documentation", "url": "https://www.jaegertracing.io/docs/"}
+              ]
+            },
+            {
+              "day": 88,
+              "title": "Metrics & Dashboards",
+              "tasks": [
+                "Expose Prometheus metrics from FastAPI (request count, latency, errors)",
+                "Add custom metrics: token usage, retrieval quality, cache hit rate",
+                "Set up Grafana dashboard with key metrics panels",
+                "Create a dashboard showing RAG pipeline performance breakdown",
+                "Add SLA tracking (p50, p95, p99 latency targets)"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Prometheus Python Client", "url": "https://github.com/prometheus/client_python"},
+                {"title": "Grafana Documentation", "url": "https://grafana.com/docs/grafana/latest/"},
+                {"title": "RED Method (Metrics)", "url": "https://grafana.com/blog/2018/08/02/the-red-method-how-to-instrument-your-services/"}
+              ]
+            },
+            {
+              "day": 89,
+              "title": "Alerting & Error Tracking",
+              "tasks": [
+                "Set up error tracking with Sentry",
+                "Configure alerts for: high error rate, slow responses, budget exceeded",
+                "Implement a health check dashboard showing component status",
+                "Add PagerDuty/Slack integration for critical alerts (or simulate it)",
+                "Create a runbook for common alert scenarios"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "Sentry Python SDK", "url": "https://docs.sentry.io/platforms/python/"},
+                {"title": "Alerting Best Practices", "url": "https://sre.google/sre-book/monitoring-distributed-systems/"},
+                {"title": "Runbook Template", "url": "https://www.atlassian.com/incident-management/kbs/runbooks"}
+              ]
+            },
+            {
+              "day": 90,
+              "title": "LLM-Specific Observability",
+              "tasks": [
+                "Track token usage per request with cost attribution",
+                "Implement quality monitoring (detect low-quality or hallucinated responses)",
+                "Build a feedback loop for flagging bad responses",
+                "Create a daily report of usage, costs, and quality metrics",
+                "Set up anomaly detection for unusual usage patterns"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "LangFuse - LLM Observability", "url": "https://langfuse.com/docs"},
+                {"title": "PromptLayer", "url": "https://docs.promptlayer.com/"},
+                {"title": "LLM Monitoring Best Practices", "url": "https://arize.com/blog/llm-monitoring/"}
+              ]
+            }
+          ]
+        },
+        {
+          "weekNumber": 19,
+          "title": "Cost Optimization & Caching",
+          "concepts": ["semantic caching", "model routing", "batching", "cost analysis", "optimization"],
+          "days": [
+            {
+              "day": 91,
+              "title": "Semantic Caching",
+              "tasks": [
+                "Implement exact-match caching with Redis",
+                "Build a semantic cache: cache responses for semantically similar queries",
+                "Configure cache TTL and invalidation strategies",
+                "Measure cache hit rates and latency improvement",
+                "Handle cache coherency when documents are updated"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Redis Python (redis-py)", "url": "https://redis-py.readthedocs.io/en/stable/"},
+                {"title": "GPTCache", "url": "https://github.com/zilliztech/GPTCache"},
+                {"title": "Semantic Caching Patterns", "url": "https://redis.io/docs/latest/develop/interact/search-and-query/"}
+              ]
+            },
+            {
+              "day": 92,
+              "title": "Model Routing & Tiering",
+              "tasks": [
+                "Implement a model router that selects the cheapest suitable model per query",
+                "Create tiers: simple (small model) → medium (GPT-3.5) → complex (GPT-4/Claude)",
+                "Build a complexity classifier to route queries",
+                "Implement fallback chains (try cheap model first, escalate if needed)",
+                "Measure cost savings from intelligent routing"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Model Routing Strategies", "url": "https://www.anthropic.com/news/extended-thinking-tips"},
+                {"title": "LLM Cascade", "url": "https://arxiv.org/abs/2305.01255"},
+                {"title": "FrugalGPT Paper", "url": "https://arxiv.org/abs/2305.05176"}
+              ]
+            },
+            {
+              "day": 93,
+              "title": "Batch Processing & Async",
+              "tasks": [
+                "Implement request batching for embedding generation",
+                "Build an async pipeline for document ingestion",
+                "Add background job processing with Celery or ARQ",
+                "Implement priority queues for different request types",
+                "Benchmark throughput with batching vs sequential processing"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "ARQ - Async Task Queue", "url": "https://arq-docs.helpmanual.io/"},
+                {"title": "Celery Documentation", "url": "https://docs.celeryq.dev/en/stable/"},
+                {"title": "FastAPI Background Tasks", "url": "https://fastapi.tiangolo.com/tutorial/background-tasks/"}
+              ]
+            },
+            {
+              "day": 94,
+              "title": "Cost Analysis & Budgeting",
+              "tasks": [
+                "Build a cost analysis dashboard showing per-endpoint costs",
+                "Implement per-user budget limits and usage quotas",
+                "Create cost projections based on current usage trends",
+                "Identify the most expensive operations and optimize them",
+                "Write a cost optimization report with recommendations"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "OpenAI Usage API", "url": "https://platform.openai.com/docs/api-reference/usage"},
+                {"title": "Cloud Cost Optimization", "url": "https://cloud.google.com/architecture/framework/cost-optimization"},
+                {"title": "FinOps for AI", "url": "https://www.finops.org/"}
+              ]
+            },
+            {
+              "day": 95,
+              "title": "Response Quality Optimization",
+              "tasks": [
+                "Implement adaptive retrieval (skip RAG for simple questions)",
+                "Add response post-processing (format checking, fact verification)",
+                "Implement streaming with early termination for simple answers",
+                "Build an A/B testing framework for prompt variations",
+                "Optimize prompt templates for lower token usage while maintaining quality"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Prompt Optimization", "url": "https://arxiv.org/abs/2305.03495"},
+                {"title": "Self-RAG Paper", "url": "https://arxiv.org/abs/2310.11511"},
+                {"title": "Adaptive Retrieval", "url": "https://arxiv.org/abs/2310.01558"}
+              ]
+            }
+          ]
+        },
+        {
+          "weekNumber": 20,
+          "title": "Scaling & Reliability",
+          "concepts": ["load testing", "circuit breakers", "task queues", "horizontal scaling", "disaster recovery"],
+          "days": [
+            {
+              "day": 96,
+              "title": "Load Testing",
+              "tasks": [
+                "Set up Locust for load testing the API",
+                "Write load test scenarios: normal traffic, peak traffic, spike traffic",
+                "Run load tests and identify bottlenecks",
+                "Test concurrent document ingestion under load",
+                "Generate a load test report with recommendations"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Locust Documentation", "url": "https://docs.locust.io/en/stable/"},
+                {"title": "Load Testing Best Practices", "url": "https://grafana.com/blog/2024/01/30/load-testing-best-practices/"},
+                {"title": "k6 Load Testing", "url": "https://k6.io/docs/"}
+              ]
+            },
+            {
+              "day": 97,
+              "title": "Circuit Breakers & Resilience",
+              "tasks": [
+                "Implement circuit breaker pattern for LLM API calls",
+                "Add bulkhead pattern to isolate failures between endpoints",
+                "Implement graceful degradation (serve cached results when LLM is down)",
+                "Add request queuing for backpressure management",
+                "Test resilience by simulating provider outages"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Circuit Breaker Pattern", "url": "https://docs.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker"},
+                {"title": "pybreaker", "url": "https://github.com/danielfm/pybreaker"},
+                {"title": "Resilience Engineering", "url": "https://docs.microsoft.com/en-us/azure/architecture/patterns/bulkhead"}
+              ]
+            },
+            {
+              "day": 98,
+              "title": "Horizontal Scaling",
+              "tasks": [
+                "Configure multiple API workers with Gunicorn/Uvicorn",
+                "Externalize all state (sessions, cache, vectors) to shared services",
+                "Implement sticky sessions for WebSocket connections if needed",
+                "Test scaling from 1 to 4 workers and measure throughput increase",
+                "Document the scaling architecture"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Gunicorn Configuration", "url": "https://docs.gunicorn.org/en/stable/settings.html"},
+                {"title": "Uvicorn Workers", "url": "https://www.uvicorn.org/deployment/"},
+                {"title": "Horizontal Scaling Patterns", "url": "https://cloud.google.com/architecture/framework/performance-optimization/scaling"}
+              ]
+            },
+            {
+              "day": 99,
+              "title": "ProdRAG - Final Assembly",
+              "tasks": [
+                "Integrate all production features: caching, monitoring, scaling, resilience",
+                "Write a comprehensive ops runbook",
+                "Create a CI/CD pipeline with GitHub Actions",
+                "Set up staging and production environments",
+                "Run final load tests and verify all monitoring works"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "GitHub Actions", "url": "https://docs.github.com/en/actions"},
+                {"title": "CI/CD Best Practices", "url": "https://docs.gitlab.com/ee/ci/pipelines/pipeline_efficiency.html"},
+                {"title": "Production Readiness Checklist", "url": "https://grpc.io/docs/guides/production-checklist/"}
+              ]
+            },
+            {
+              "day": 100,
+              "title": "Month 5 Review & Retrospective",
+              "tasks": [
+                "Run full load test suite and publish results",
+                "Verify all monitoring dashboards and alerts are working",
+                "Write a production readiness review document",
+                "Push final code to GitHub with deployment documentation",
+                "Preview Month 6 and plan the capstone project"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "Production Readiness Review", "url": "https://sre.google/sre-book/evolving-sre-engagement-model/"},
+                {"title": "Post-Mortem Template", "url": "https://sre.google/sre-book/postmortem-culture/"},
+                {"title": "System Design Interview", "url": "https://github.com/donnemartin/system-design-primer"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Portfolio & Interview Prep",
+      "color": "#ef4444",
+      "project": {
+        "name": "CapstoneAI - Full-Stack AI Application",
+        "description": "Build a polished, end-to-end AI application that showcases all learned skills, with CI/CD, testing, and deployment."
+      },
+      "weeks": [
+        {
+          "weekNumber": 21,
+          "title": "Capstone Architecture & Build",
+          "concepts": ["system design", "architecture", "integration", "end-to-end development"],
+          "days": [
+            {
+              "day": 101,
+              "title": "Capstone Planning & Architecture",
+              "tasks": [
+                "Choose your capstone project idea (combines RAG + agents + fine-tuning)",
+                "Draw a system architecture diagram (components, data flow, APIs)",
+                "Define API contracts and data models",
+                "Create a project plan with milestones for the next 2 weeks",
+                "Set up the project repository with CI/CD from day one"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer"},
+                {"title": "Architecture Decision Records", "url": "https://adr.github.io/"},
+                {"title": "C4 Model for Architecture", "url": "https://c4model.com/"}
+              ]
+            },
+            {
+              "day": 102,
+              "title": "Backend Core Implementation",
+              "tasks": [
+                "Implement the core backend with FastAPI",
+                "Set up database models and migrations",
+                "Implement the RAG pipeline for the capstone",
+                "Add authentication and user management",
+                "Write initial API tests"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "FastAPI Full-Stack Template", "url": "https://github.com/fastapi/full-stack-fastapi-template"},
+                {"title": "SQLModel Documentation", "url": "https://sqlmodel.tiangolo.com/"},
+                {"title": "Alembic Migrations", "url": "https://alembic.sqlalchemy.org/en/latest/"}
+              ]
+            },
+            {
+              "day": 103,
+              "title": "Agent Integration",
+              "tasks": [
+                "Integrate LangGraph agents into the capstone backend",
+                "Build agent workflows specific to your capstone domain",
+                "Add tool integrations (search, code execution, data analysis)",
+                "Implement WebSocket for real-time agent streaming",
+                "Test agent workflows end-to-end"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "LangGraph + FastAPI", "url": "https://langchain-ai.github.io/langgraph/tutorials/web-navigation/web_voyager/"},
+                {"title": "WebSocket with FastAPI", "url": "https://fastapi.tiangolo.com/advanced/websockets/"},
+                {"title": "Server-Sent Events", "url": "https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events"}
+              ]
+            },
+            {
+              "day": 104,
+              "title": "Frontend Development",
+              "tasks": [
+                "Build a frontend UI (React, Next.js, or simple HTML/JS)",
+                "Implement the chat interface with streaming display",
+                "Add document upload and management UI",
+                "Implement user authentication flow",
+                "Test frontend-backend integration"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Next.js Documentation", "url": "https://nextjs.org/docs"},
+                {"title": "Vercel AI SDK", "url": "https://sdk.vercel.ai/docs"},
+                {"title": "Tailwind CSS", "url": "https://tailwindcss.com/docs"}
+              ]
+            },
+            {
+              "day": 105,
+              "title": "Fine-Tuned Model Integration",
+              "tasks": [
+                "Integrate your fine-tuned model from Month 4 (or deploy via API)",
+                "Implement model routing: use fine-tuned model for domain tasks, general model for others",
+                "Add guardrails from Month 4 to the production pipeline",
+                "Test the integrated system with domain-specific queries",
+                "Benchmark: fine-tuned vs general model on capstone tasks"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Model Serving Options", "url": "https://docs.vllm.ai/en/latest/"},
+                {"title": "HuggingFace Inference Endpoints", "url": "https://huggingface.co/docs/inference-endpoints/"},
+                {"title": "Model Registry", "url": "https://mlflow.org/docs/latest/model-registry.html"}
+              ]
+            }
+          ]
+        },
+        {
+          "weekNumber": 22,
+          "title": "Capstone Polish & Deploy",
+          "concepts": ["testing", "CI/CD", "deployment", "documentation", "demo"],
+          "days": [
+            {
+              "day": 106,
+              "title": "Comprehensive Testing",
+              "tasks": [
+                "Write unit tests for all core modules (target 80% coverage)",
+                "Write integration tests for API endpoints",
+                "Add end-to-end tests for critical user flows",
+                "Implement RAG evaluation on your capstone's data",
+                "Fix all bugs discovered during testing"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "pytest Best Practices", "url": "https://docs.pytest.org/en/stable/goodpractices.html"},
+                {"title": "Testing ML Systems", "url": "https://madewithml.com/courses/mlops/testing/"},
+                {"title": "Coverage.py", "url": "https://coverage.readthedocs.io/en/latest/"}
+              ]
+            },
+            {
+              "day": 107,
+              "title": "CI/CD Pipeline",
+              "tasks": [
+                "Set up GitHub Actions for CI (lint, test, type-check on every PR)",
+                "Add automated deployment to staging on merge to main",
+                "Implement deployment to production with manual approval",
+                "Add Docker image building and pushing to registry",
+                "Test the full CI/CD pipeline end-to-end"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "GitHub Actions CI/CD", "url": "https://docs.github.com/en/actions/automating-builds-and-tests"},
+                {"title": "Docker GitHub Actions", "url": "https://docs.docker.com/build/ci/github-actions/"},
+                {"title": "GitOps Practices", "url": "https://www.gitops.tech/"}
+              ]
+            },
+            {
+              "day": 108,
+              "title": "Production Deployment",
+              "tasks": [
+                "Deploy the full capstone to production",
+                "Set up monitoring and alerting (reuse Month 5 patterns)",
+                "Configure auto-scaling (if using cloud provider)",
+                "Set up backup and disaster recovery",
+                "Verify production deployment with smoke tests"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Production Deployment Checklist", "url": "https://grpc.io/docs/guides/production-checklist/"},
+                {"title": "Cloud Run Deployment", "url": "https://cloud.google.com/run/docs/deploying"},
+                {"title": "Health Checks", "url": "https://docs.docker.com/reference/dockerfile/#healthcheck"}
+              ]
+            },
+            {
+              "day": 109,
+              "title": "Documentation & Demo",
+              "tasks": [
+                "Write a polished README with architecture diagram, screenshots, and GIFs",
+                "Create API documentation (auto-generated from FastAPI + custom guides)",
+                "Record a 3-5 minute demo video walkthrough",
+                "Write a technical blog post about the capstone architecture",
+                "Add badges (CI status, coverage, license) to README"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Awesome README Examples", "url": "https://github.com/matiassingers/awesome-readme"},
+                {"title": "OBS Studio for Recording", "url": "https://obsproject.com/"},
+                {"title": "Shields.io Badges", "url": "https://shields.io/"}
+              ]
+            },
+            {
+              "day": 110,
+              "title": "Capstone Review & Refinement",
+              "tasks": [
+                "Get feedback from peers or the community on your capstone",
+                "Fix any UX issues or bugs reported",
+                "Optimize performance based on monitoring data",
+                "Finalize all documentation",
+                "Submit the capstone to HuggingFace Spaces or a live URL"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "HuggingFace Spaces", "url": "https://huggingface.co/docs/hub/spaces"},
+                {"title": "Streamlit Cloud", "url": "https://streamlit.io/cloud"},
+                {"title": "Code Review Checklist", "url": "https://github.com/mgreiler/code-review-checklist"}
+              ]
+            }
+          ]
+        },
+        {
+          "weekNumber": 23,
+          "title": "System Design for AI Interviews",
+          "concepts": ["system design", "scalability", "trade-offs", "AI architecture", "interview patterns"],
+          "days": [
+            {
+              "day": 111,
+              "title": "AI System Design Fundamentals",
+              "tasks": [
+                "Study the AI system design interview framework (requirements → architecture → deep dive)",
+                "Learn common AI system components (serving, feature stores, model registries)",
+                "Practice: Design a real-time content moderation system",
+                "Draw architecture diagrams for your design",
+                "Identify and discuss trade-offs in your design"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "ML System Design (Chip Huyen)", "url": "https://huyenchip.com/machine-learning-systems-design/toc.html"},
+                {"title": "System Design Primer", "url": "https://github.com/donnemartin/system-design-primer"},
+                {"title": "Designing ML Systems (Book)", "url": "https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/"}
+              ]
+            },
+            {
+              "day": 112,
+              "title": "Design Exercise: RAG at Scale",
+              "tasks": [
+                "Design a RAG system that serves 10M users with 1B documents",
+                "Address: indexing pipeline, serving architecture, caching strategy",
+                "Handle: multi-tenancy, access control, freshness guarantees",
+                "Calculate infrastructure costs and propose optimizations",
+                "Practice explaining your design (record yourself or use a timer)"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "RAG at Scale", "url": "https://www.pinecone.io/learn/series/rag/"},
+                {"title": "Scaling ML Systems", "url": "https://huyenchip.com/2023/04/11/llm-engineering.html"},
+                {"title": "Vector Database Scaling", "url": "https://www.pinecone.io/learn/vector-database/"}
+              ]
+            },
+            {
+              "day": 113,
+              "title": "Design Exercise: AI Agent Platform",
+              "tasks": [
+                "Design a multi-tenant AI agent platform (like a managed LangGraph service)",
+                "Address: agent isolation, resource limits, billing, observability",
+                "Handle: tool sandboxing, state persistence, horizontal scaling",
+                "Design the API and developer experience",
+                "Practice the 45-minute design interview format"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Platform Engineering", "url": "https://platformengineering.org/blog/what-is-platform-engineering"},
+                {"title": "Multi-Tenant Architecture", "url": "https://docs.microsoft.com/en-us/azure/architecture/guide/multitenant/overview"},
+                {"title": "Agent Infrastructure", "url": "https://langchain-ai.github.io/langgraph/cloud/"}
+              ]
+            },
+            {
+              "day": 114,
+              "title": "Design Exercise: LLM Gateway",
+              "tasks": [
+                "Design an LLM Gateway/Proxy service (routing, caching, rate limiting, observability)",
+                "Address: provider failover, cost optimization, model routing",
+                "Handle: streaming, function calling proxy, token counting",
+                "Design a usage analytics and billing system",
+                "Write up your design as a 2-page architecture document"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "LiteLLM - LLM Gateway", "url": "https://github.com/BerriAI/litellm"},
+                {"title": "API Gateway Patterns", "url": "https://docs.microsoft.com/en-us/azure/architecture/microservices/design/gateway"},
+                {"title": "Portkey AI Gateway", "url": "https://github.com/Portkey-AI/gateway"}
+              ]
+            },
+            {
+              "day": 115,
+              "title": "Design Review & Mock Interviews",
+              "tasks": [
+                "Review all 3 design exercises and refine weak areas",
+                "Practice explaining designs within time limits (5 min overview, 15 min deep dive)",
+                "Prepare for common follow-up questions (scaling, failure modes, cost)",
+                "Create a cheat sheet of key numbers (latency, throughput, costs)",
+                "Do a mock interview with a peer or rubber duck"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Mock Interview Tips", "url": "https://interviewing.io/blog/how-to-prepare-for-system-design-interviews"},
+                {"title": "System Design Cheat Sheet", "url": "https://gist.github.com/vasanthk/485d1c25737e8e72759f"},
+                {"title": "Numbers Every Engineer Should Know", "url": "https://samwho.dev/numbers/"}
+              ]
+            }
+          ]
+        },
+        {
+          "weekNumber": 24,
+          "title": "Technical Interview Prep & Portfolio",
+          "concepts": ["coding interviews", "behavioral interviews", "portfolio", "networking", "job search"],
+          "days": [
+            {
+              "day": 116,
+              "title": "AI/ML Coding Interview Prep",
+              "tasks": [
+                "Practice 5 LLM-related coding problems (implement RAG from scratch, build a simple agent)",
+                "Practice 3 data structure problems relevant to AI (trie for tokenization, heap for top-k)",
+                "Write clean, well-tested solutions with proper error handling",
+                "Time yourself: aim for 30-45 minutes per problem",
+                "Review and optimize your solutions"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "LeetCode ML Problems", "url": "https://leetcode.com/tag/machine-learning/"},
+                {"title": "Coding Interview Patterns", "url": "https://github.com/dipjul/Grokking-the-Coding-Interview-Patterns-for-Coding-Questions"},
+                {"title": "NeetCode", "url": "https://neetcode.io/"}
+              ]
+            },
+            {
+              "day": 117,
+              "title": "AI Concepts Deep Review",
+              "tasks": [
+                "Review transformer architecture (attention, positional encoding, KV cache)",
+                "Study: RLHF, DPO, Constitutional AI, model distillation",
+                "Review: embeddings, vector search, RAG patterns, evaluation metrics",
+                "Prepare concise explanations for each concept (teach it to explain it)",
+                "Create flashcards for key concepts and formulas"
+              ],
+              "timeEstimate": "2 hours",
+              "resources": [
+                {"title": "Attention Is All You Need", "url": "https://arxiv.org/abs/1706.03762"},
+                {"title": "Illustrated Transformer", "url": "https://jalammar.github.io/illustrated-transformer/"},
+                {"title": "LLM Fundamentals Course", "url": "https://github.com/mlabonne/llm-course"}
+              ]
+            },
+            {
+              "day": 118,
+              "title": "Behavioral Interview Prep",
+              "tasks": [
+                "Prepare 5 STAR stories from your AI project experience",
+                "Practice explaining each portfolio project in 2 minutes",
+                "Prepare answers for: 'Why AI engineering?', 'Hardest technical challenge?'",
+                "Practice discussing trade-offs you made in your projects",
+                "Record yourself answering 3 behavioral questions and review"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "STAR Method Guide", "url": "https://www.themuse.com/advice/star-interview-method"},
+                {"title": "Behavioral Interview Questions", "url": "https://www.techinterviewhandbook.org/behavioral-interview/"},
+                {"title": "AI Engineer Role Guide", "url": "https://huyenchip.com/2023/04/11/llm-engineering.html"}
+              ]
+            },
+            {
+              "day": 119,
+              "title": "Portfolio Polish & Online Presence",
+              "tasks": [
+                "Ensure all 6 GitHub repos have polished READMEs with demos",
+                "Update your LinkedIn/resume with AI engineering projects and skills",
+                "Write a portfolio summary page or personal site update",
+                "Prepare a 'portfolio walkthrough' presentation (5 minutes)",
+                "Connect with AI engineering communities (Discord, Twitter, local meetups)"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "GitHub Profile Optimization", "url": "https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile"},
+                {"title": "AI Engineer Resume Tips", "url": "https://www.levels.fyi/blog/ai-engineer-resume.html"},
+                {"title": "Portfolio Best Practices", "url": "https://www.joshwcomeau.com/effective-portfolio/"}
+              ]
+            },
+            {
+              "day": 120,
+              "title": "Final Review & Next Steps",
+              "tasks": [
+                "Review everything you've built over 6 months - celebrate your progress!",
+                "Identify your strongest areas and areas for continued growth",
+                "Create a 'continued learning' plan for the next 3 months",
+                "Start applying to AI engineering roles",
+                "Set up informational interviews with AI engineers at target companies"
+              ],
+              "timeEstimate": "1.5 hours",
+              "resources": [
+                {"title": "AI Engineer Job Boards", "url": "https://aijobs.net/"},
+                {"title": "Levels.fyi AI Roles", "url": "https://www.levels.fyi/t/ai-engineer"},
+                {"title": "Networking for Engineers", "url": "https://www.kalzumeus.com/2012/01/23/salary-negotiation/"}
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
