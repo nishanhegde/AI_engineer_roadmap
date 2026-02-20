@@ -147,11 +147,56 @@
               "day": 3,
               "title": "Anthropic API Deep Dive",
               "tasks": [
-                "Read Anthropic API reference for messages endpoint",
-                "Make your first Anthropic API call with claude-sonnet",
-                "Compare Anthropic's message format with OpenAI's (system prompt handling differences)",
-                "Implement the same multi-turn conversation using Anthropic's SDK",
-                "Write a comparison script that sends the same prompt to both providers"
+                {
+                  "title": "Read Anthropic API reference for messages endpoint",
+                  "steps": [
+                    "Get Anthropic API key: console.anthropic.com → API Keys → Create Key",
+                    "Set env var: `export ANTHROPIC_API_KEY='sk-ant-...'`",
+                    "Read the messages API docs (link in Resources below) — focus on request format, the `system` field, and response shape",
+                    "Key difference from OpenAI: `system` is a top-level param, NOT a message with `role='system'`",
+                    "Note: `max_tokens` is required in Anthropic (optional in OpenAI)"
+                  ]
+                },
+                {
+                  "title": "Make your first Anthropic API call with claude-sonnet",
+                  "steps": [
+                    "Create `~/ai-engineer/day3_anthropic.py`",
+                    "Import and init: `import anthropic` then `client = anthropic.Anthropic()` — reads ANTHROPIC_API_KEY from env",
+                    "Make the call: `message = client.messages.create(model='claude-sonnet-4-5', max_tokens=1024, messages=[{'role':'user','content':'Say hello in one sentence'}])`",
+                    "Print result: `print(message.content[0].text)`",
+                    "Run: `python day3_anthropic.py` — you should see a response from Claude"
+                  ]
+                },
+                {
+                  "title": "Compare Anthropic's message format with OpenAI's (system prompt handling differences)",
+                  "steps": [
+                    "OpenAI system prompt goes inside messages list: `messages=[{'role':'system','content':'You are...'}, ...]`",
+                    "Anthropic system prompt is a separate top-level param: `client.messages.create(system='You are...', messages=[...])`",
+                    "OpenAI response: `response.choices[0].message.content`",
+                    "Anthropic response: `message.content[0].text`",
+                    "Add comments in your code documenting these 2 differences — you'll reference them in Day 4"
+                  ]
+                },
+                {
+                  "title": "Implement the same multi-turn conversation using Anthropic's SDK",
+                  "steps": [
+                    "Create `messages = []` — no system message in the list for Anthropic",
+                    "In a loop: get user input with `input('You: ')`, append `{'role':'user','content':user_input}`",
+                    "Call: `client.messages.create(model='claude-sonnet-4-5', system='You are helpful.', messages=messages, max_tokens=512)`",
+                    "Append assistant reply: `messages.append({'role':'assistant','content':reply})`",
+                    "Test: say 'My name is Nishan' then 'What is my name?' — it should remember"
+                  ]
+                },
+                {
+                  "title": "Write a comparison script that sends the same prompt to both providers",
+                  "steps": [
+                    "Create `~/ai-engineer/compare_providers.py`",
+                    "Import both: `from openai import OpenAI` and `import anthropic`",
+                    "Define one prompt string, send it to both APIs in sequence",
+                    "Use `import time` and `time.time()` before/after each call to measure latency",
+                    "Print side-by-side: label, response text, token usage, time taken — note the differences"
+                  ]
+                }
               ],
               "timeEstimate": "1.5 hours",
               "resources": [
@@ -164,11 +209,56 @@
               "day": 4,
               "title": "Provider Abstraction Layer",
               "tasks": [
-                "Design a unified interface (Protocol/ABC) for LLM providers",
-                "Implement OpenAIProvider class wrapping the OpenAI SDK",
-                "Implement AnthropicProvider class wrapping the Anthropic SDK",
-                "Create a ProviderFactory that returns the correct provider by name",
-                "Write unit tests for the abstraction layer using mock responses"
+                {
+                  "title": "Design a unified interface (Protocol/ABC) for LLM providers",
+                  "steps": [
+                    "Create folder `~/ai-engineer/providers/` with an empty `__init__.py`",
+                    "Create `providers/base.py`, import: `from typing import Protocol`",
+                    "Define `class LLMProvider(Protocol):` with one method: `def chat(self, messages: list[dict], **kwargs) -> str: ...`",
+                    "Any class that has a matching `chat` method automatically satisfies this Protocol — no inheritance needed",
+                    "Add `from .base import LLMProvider` to `providers/__init__.py`"
+                  ]
+                },
+                {
+                  "title": "Implement OpenAIProvider class wrapping the OpenAI SDK",
+                  "steps": [
+                    "Create `providers/openai_provider.py`",
+                    "Define `class OpenAIProvider:` with `__init__(self, model='gpt-4o-mini')` and init `self.client = OpenAI()`",
+                    "Add `def chat(self, messages: list[dict], **kwargs) -> str:`",
+                    "Inside: `response = self.client.chat.completions.create(model=self.model, messages=messages, **kwargs)`",
+                    "Return: `response.choices[0].message.content`"
+                  ]
+                },
+                {
+                  "title": "Implement AnthropicProvider class wrapping the Anthropic SDK",
+                  "steps": [
+                    "Create `providers/anthropic_provider.py`",
+                    "Define `class AnthropicProvider:` with `__init__(self, model='claude-haiku-4-5-20251001')` and init `self.client = anthropic.Anthropic()`",
+                    "Add `def chat(self, messages: list[dict], system: str = '', **kwargs) -> str:`",
+                    "Filter out any `role='system'` messages from the list (Anthropic takes system as a separate param)",
+                    "Return: `self.client.messages.create(...).content[0].text`"
+                  ]
+                },
+                {
+                  "title": "Create a ProviderFactory that returns the correct provider by name",
+                  "steps": [
+                    "Create `providers/factory.py`, import both provider classes",
+                    "Define: `PROVIDERS = {'openai': OpenAIProvider, 'anthropic': AnthropicProvider}`",
+                    "Define: `def get_provider(name: str) -> LLMProvider: return PROVIDERS[name.lower()]()`",
+                    "Add a KeyError handler with a helpful message listing valid names",
+                    "Test: `p = get_provider('openai')` then `print(p.chat([{'role':'user','content':'Hello'}]))`"
+                  ]
+                },
+                {
+                  "title": "Write unit tests for the abstraction layer using mock responses",
+                  "steps": [
+                    "Create `~/ai-engineer/tests/test_providers.py` and install: `uv add pytest`",
+                    "Import: `from unittest.mock import patch, MagicMock`",
+                    "Patch the OpenAI client: `@patch('providers.openai_provider.OpenAI')` — mock returns a fake response",
+                    "Assert that `OpenAIProvider().chat([...])` returns a string",
+                    "Run: `pytest tests/ -v` — tests should pass without real API calls"
+                  ]
+                }
               ],
               "timeEstimate": "2 hours",
               "resources": [
@@ -181,11 +271,56 @@
               "day": 5,
               "title": "Pydantic Models & Configuration",
               "tasks": [
-                "Create Pydantic models for: ChatMessage, ChatRequest, ChatResponse, ProviderConfig",
-                "Implement a YAML/TOML config file loader for API keys and defaults",
-                "Add input validation with custom Pydantic validators",
-                "Write a configuration manager that supports env vars + config file",
-                "Test all models with valid and invalid data"
+                {
+                  "title": "Create Pydantic models for: ChatMessage, ChatRequest, ChatResponse, ProviderConfig",
+                  "steps": [
+                    "Open `~/ai-engineer/models.py` from Day 1 and extend it",
+                    "Update `ChatMessage`: add `role: Literal['system','user','assistant']` (import `Literal` from `typing`)",
+                    "Add `ChatRequest(BaseModel)`: `provider: str`, `messages: list[ChatMessage]`, `temperature: float = 0.7`, `max_tokens: int = 1000`",
+                    "Add `ChatResponse(BaseModel)`: `content: str`, `model: str`, `usage: dict`, `provider: str`",
+                    "Add `ProviderConfig(BaseModel)`: `name: str`, `api_key: str`, `model: str`, `timeout: int = 30`"
+                  ]
+                },
+                {
+                  "title": "Implement a YAML/TOML config file loader for API keys and defaults",
+                  "steps": [
+                    "Install: `uv add pyyaml`",
+                    "Create `~/ai-engineer/config.yaml` with: `openai: {api_key: sk-..., model: gpt-4o-mini}` and `anthropic: {api_key: sk-ant-..., model: claude-haiku-4-5-20251001}`",
+                    "Create `~/ai-engineer/config_loader.py` with: `import yaml` and `def load_config(path='config.yaml'): return yaml.safe_load(open(path))`",
+                    "Add `config.yaml` to `.gitignore` — never commit API keys",
+                    "Test: `python config_loader.py` — should print your config dict"
+                  ]
+                },
+                {
+                  "title": "Add input validation with custom Pydantic validators",
+                  "steps": [
+                    "Import: `from pydantic import field_validator`",
+                    "On `ChatRequest`, add: `@field_validator('temperature') @classmethod def check_temp(cls, v): assert 0 <= v <= 2; return v`",
+                    "Add validator for `messages`: raise ValueError if list is empty",
+                    "Test invalid data: `ChatRequest(provider='openai', messages=[], temperature=5.0)` — should raise `ValidationError`",
+                    "Pydantic error message will show exactly which field failed and why — much better than plain asserts"
+                  ]
+                },
+                {
+                  "title": "Write a configuration manager that supports env vars + config file",
+                  "steps": [
+                    "Install: `uv add pydantic-settings`",
+                    "Create `class Settings(BaseSettings):` with fields `openai_api_key: str` and `anthropic_api_key: str`",
+                    "Add: `model_config = SettingsConfigDict(env_file='.env')` to read from `.env` file automatically",
+                    "Pydantic Settings reads env vars first, then falls back to `.env` file — no manual `os.getenv` needed",
+                    "Test: `settings = Settings()` then `print(settings.openai_api_key)` — should show your key"
+                  ]
+                },
+                {
+                  "title": "Test all models with valid and invalid data",
+                  "steps": [
+                    "Create `~/ai-engineer/tests/test_models.py`",
+                    "Test valid: `ChatMessage(role='user', content='Hello')` — should not raise",
+                    "Test invalid role: `ChatMessage(role='robot', content='Hello')` — should raise `ValidationError`",
+                    "Test invalid temperature: `ChatRequest(provider='openai', messages=[...], temperature=5.0)` — should fail",
+                    "Run: `pytest tests/test_models.py -v` — all assertions should pass ✅"
+                  ]
+                }
               ],
               "timeEstimate": "1.5 hours",
               "resources": [
