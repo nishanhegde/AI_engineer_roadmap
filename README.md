@@ -9,10 +9,10 @@ A hands-on, project-based **6-month learning roadmap** for experienced software 
 ## 🚀 Quick Start
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/AI_engineer_roadmap
+git clone https://github.com/nishanhegde/AI_engineer_roadmap
 cd AI_engineer_roadmap
-python3 -m http.server 8000
-# Open http://localhost:8000
+python3 -m http.server 7001
+# Open http://localhost:7001
 ```
 
 ---
@@ -53,13 +53,15 @@ AI_engineer_roadmap/
 Open `index.html` via a local server (required to load `daily_tasks.json`):
 
 ```bash
-python3 -m http.server 8000
+python3 -m http.server 7001
+# Open http://localhost:7001
 ```
 
 **Features:**
 - Dark-mode UI with sidebar month navigation
 - Calendar grid with per-day task completion dots
 - Click any day → checklist, resources, and notes
+- **Step-by-step guides** — click "▶ How to do this" under any task for exact commands and instructions
 - 🔥 Streak counter and per-month/overall progress bars
 - "What's Next" panel — jump to your next incomplete day
 - `localStorage` persistence (no account needed)
@@ -119,8 +121,8 @@ End-to-end AI app combining all prior skills: RAG + agents + fine-tuned model + 
 
 ### Track progress in the browser
 ```bash
-python3 -m http.server 8000
-# Open http://localhost:8000
+python3 -m http.server 7001
+# Open http://localhost:7001
 ```
 
 ### Read the full roadmap

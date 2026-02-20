@@ -25,11 +25,54 @@
               "day": 1,
               "title": "Dev Environment & Python Async Refresh",
               "tasks": [
-                "Set up a Python 3.11+ virtual environment with uv or poetry",
-                "Review Python async/await patterns: create 3 async functions that fetch data concurrently",
-                "Install openai, anthropic, pydantic, and typer packages",
-                "Write a Pydantic model for an LLM API request (model, messages, temperature, max_tokens)",
-                "Verify setup by running a simple async script"
+                {
+                  "title": "Set up a Python 3.11+ virtual environment with uv or poetry",
+                  "steps": [
+                    "Install uv (fast Python package manager): `curl -LsSf https://astral.sh/uv/install.sh | sh`",
+                    "Restart terminal, then verify: `uv --version`",
+                    "Create project folder: `mkdir ~/ai-engineer && cd ~/ai-engineer`",
+                    "Initialize project and create venv: `uv init . && uv venv .venv`",
+                    "Activate the venv: `source .venv/bin/activate` — you'll see (.venv) in your prompt"
+                  ]
+                },
+                {
+                  "title": "Review Python async/await patterns: create 3 async functions that fetch data concurrently",
+                  "steps": [
+                    "Create file `~/ai-engineer/practice_async.py`",
+                    "Install httpx for async HTTP: `uv add httpx`",
+                    "Write 3 async functions, each fetching a different URL using `httpx.AsyncClient`",
+                    "Use `asyncio.gather(fn1(), fn2(), fn3())` to run all 3 concurrently — not one-by-one",
+                    "Run: `python practice_async.py` — all 3 should complete faster than sequential"
+                  ]
+                },
+                {
+                  "title": "Install openai, anthropic, pydantic, and typer packages",
+                  "steps": [
+                    "Make sure your venv is active — you should see (.venv) in your terminal prompt",
+                    "Install all packages: `uv add openai anthropic pydantic typer httpx`",
+                    "Verify: `uv pip list | grep -E 'openai|anthropic|pydantic'`"
+                  ]
+                },
+                {
+                  "title": "Write a Pydantic model for an LLM API request (model, messages, temperature, max_tokens)",
+                  "steps": [
+                    "Create `~/ai-engineer/models.py`",
+                    "Add: `from pydantic import BaseModel`",
+                    "Define `ChatMessage(BaseModel)` with fields: `role: str` and `content: str`",
+                    "Define `LLMRequest(BaseModel)` with: `model: str`, `messages: list[ChatMessage]`, `temperature: float = 0.7`, `max_tokens: int = 1000`",
+                    "Run: `python models.py` — no errors means Pydantic validated your model correctly"
+                  ]
+                },
+                {
+                  "title": "Verify setup by running a simple async script",
+                  "steps": [
+                    "Create `~/ai-engineer/verify.py`",
+                    "Add: `import openai, anthropic, pydantic, typer`",
+                    "Add: `print('All packages loaded! Setup complete.')`",
+                    "Run: `python verify.py` — no ImportError means setup is complete ✅",
+                    "Mark all 5 tasks done in the tracker and write a note about what you learned"
+                  ]
+                }
               ],
               "timeEstimate": "1.5 hours",
               "resources": [
@@ -42,11 +85,56 @@
               "day": 2,
               "title": "OpenAI API Deep Dive",
               "tasks": [
-                "Read OpenAI API reference for chat completions endpoint",
-                "Make your first API call using the OpenAI Python SDK",
-                "Experiment with temperature, top_p, and max_tokens parameters",
-                "Implement a simple multi-turn conversation (maintain message history)",
-                "Handle API errors gracefully (rate limits, invalid requests, timeouts)"
+                {
+                  "title": "Read OpenAI API reference for chat completions endpoint",
+                  "steps": [
+                    "Go to platform.openai.com → API Keys → Create new secret key",
+                    "Set your key in terminal: `export OPENAI_API_KEY='sk-...'`",
+                    "Or create `~/ai-engineer/.env` file with: `OPENAI_API_KEY=sk-...`",
+                    "Read the Chat Completions docs (link below) — focus on: request body shape, response shape, and the `usage` field",
+                    "Note the key fields: `model`, `messages` (role + content), `temperature`, `max_tokens`, `usage.total_tokens`"
+                  ]
+                },
+                {
+                  "title": "Make your first API call using the OpenAI Python SDK",
+                  "steps": [
+                    "Create `~/ai-engineer/day2_openai.py`",
+                    "Import and init client: `from openai import OpenAI` then `client = OpenAI()` — reads OPENAI_API_KEY from env automatically",
+                    "Make the call: `response = client.chat.completions.create(model='gpt-4o-mini', messages=[{'role':'user','content':'Say hello in one sentence'}])`",
+                    "Print result: `print(response.choices[0].message.content)`",
+                    "Run: `python day2_openai.py` — you should see a response from GPT-4o-mini"
+                  ]
+                },
+                {
+                  "title": "Experiment with temperature, top_p, and max_tokens parameters",
+                  "steps": [
+                    "Try `temperature=0` — run the same prompt 3 times, output should be identical",
+                    "Try `temperature=1.0` — run same prompt 3 times, output should vary each time",
+                    "Try `max_tokens=20` — response gets cut off (roughly 15 words)",
+                    "Try `max_tokens=500` — response can be much longer",
+                    "Print `response.usage` to see token counts per call"
+                  ]
+                },
+                {
+                  "title": "Implement a simple multi-turn conversation (maintain message history)",
+                  "steps": [
+                    "Start with: `messages = [{'role':'system','content':'You are a helpful assistant.'}]`",
+                    "In a loop: get user input with `user_input = input('You: ')`",
+                    "Append user turn: `messages.append({'role':'user','content':user_input})`",
+                    "Call API with full `messages` list, then append assistant reply to messages",
+                    "Test: say 'My name is Nishan' then ask 'What is my name?' — it should remember"
+                  ]
+                },
+                {
+                  "title": "Handle API errors gracefully (rate limits, invalid requests, timeouts)",
+                  "steps": [
+                    "Wrap API call in try/except: `except openai.RateLimitError: print('Rate limited, wait a moment')`",
+                    "Add: `except openai.APIError as e: print(f'API error: {e}')`",
+                    "Add general fallback: `except Exception as e: print(f'Unexpected: {e}')`",
+                    "Test it: pass an invalid model name like `'gpt-99'` — you should see a clean error, not a crash",
+                    "Add `max_retries=3` to `OpenAI(max_retries=3)` — SDK will auto-retry transient errors"
+                  ]
+                }
               ],
               "timeEstimate": "1.5 hours",
               "resources": [

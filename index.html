@@ -374,15 +374,19 @@
     .tasks-list { margin-bottom: 20px; }
 
     .task-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 10px 12px;
       border-radius: 8px;
       border: 1px solid transparent;
       margin-bottom: 6px;
       transition: all 0.15s;
+    }
+
+    .task-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 12px;
       cursor: pointer;
+      border-radius: 8px;
     }
 
     .task-item:hover { background: var(--bg3); border-color: var(--border); }
@@ -426,6 +430,63 @@
     .task-item.checked .task-text {
       text-decoration: line-through;
       color: var(--muted);
+    }
+
+    /* Task steps */
+    .steps-toggle {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-size: 11px;
+      cursor: pointer;
+      padding: 0 12px 8px 42px;
+      display: block;
+      opacity: 0.75;
+      letter-spacing: 0.02em;
+    }
+
+    .steps-toggle:hover { opacity: 1; text-decoration: underline; }
+
+    .task-steps {
+      margin: 4px 12px 10px 42px;
+      border-left: 2px solid var(--border);
+      padding-left: 14px;
+    }
+
+    .task-step {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+      font-size: 12px;
+      color: var(--text2);
+      line-height: 1.5;
+    }
+
+    .step-num {
+      background: var(--accent);
+      color: white;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .step-text { flex: 1; }
+
+    .step-text code {
+      font-family: 'Courier New', monospace;
+      background: var(--bg3);
+      color: #a78bfa;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 11px;
     }
 
     /* Resources */
@@ -689,8 +750,8 @@
   <div>Loading roadmap data…</div>
   <div class="loading-hint">
     If this doesn't load, serve from a local server:<br><br>
-    <code>python -m http.server 8000</code><br>
-    then open <code>http://localhost:8000</code>
+    <code>python3 -m http.server 7001</code><br>
+    then open <code>http://localhost:7001</code>
   </div>
 </div>
 
@@ -865,8 +926,8 @@ async function init() {
       <div style="color:var(--danger);font-weight:700;font-size:16px">Failed to load daily_tasks.json</div>
       <div class="loading-hint">
         Run a local server from the roadmap folder:<br><br>
-        <code>python -m http.server 8000</code><br><br>
-        Then open: <code>http://localhost:8000</code>
+        <code>python3 -m http.server 7001</code><br><br>
+        Then open: <code>http://localhost:7001</code>
       </div>`;
   }
 }
@@ -1140,11 +1201,30 @@ function renderDayTasks(month, day) {
   document.getElementById('dp-fill').style.background = pct === 100 ? 'var(--success)' : 'var(--accent)';
 
   const list = document.getElementById('dp-tasks');
-  list.innerHTML = day.tasks.map((task, i) => `
-    <div class="task-item ${saved[i] ? 'checked' : ''}" onclick="toggleTask(${month.id}, ${day.day}, ${i})">
-      <span class="task-checkbox"></span>
-      <span class="task-text">${task}</span>
-    </div>`).join('');
+  list.innerHTML = day.tasks.map((task, i) => {
+    const isObj = typeof task === 'object' && task !== null;
+    const title = isObj ? task.title : task;
+    const steps = isObj && task.steps ? task.steps : null;
+
+    const stepsHtml = steps ? `
+      <button class="steps-toggle" onclick="event.stopPropagation();toggleSteps(${i})">▶ How to do this</button>
+      <div class="task-steps" id="steps-${i}" style="display:none">
+        ${steps.map((s, si) => `
+          <div class="task-step">
+            <span class="step-num">${si + 1}</span>
+            <span class="step-text">${s.replace(/`([^`]+)`/g, '<code>$1</code>')}</span>
+          </div>`).join('')}
+      </div>` : '';
+
+    return `
+      <div class="task-item ${saved[i] ? 'checked' : ''}" id="ti-${i}">
+        <div class="task-header" onclick="toggleTask(${month.id}, ${day.day}, ${i})">
+          <span class="task-checkbox"></span>
+          <span class="task-text">${title}</span>
+        </div>
+        ${stepsHtml}
+      </div>`;
+  }).join('');
 }
 
 function renderDayResources(day) {
@@ -1156,6 +1236,14 @@ function renderDayResources(day) {
   res.innerHTML = day.resources.map(r =>
     `<a class="resource-link" href="${r.url}" target="_blank" rel="noopener">↗ ${r.title}</a>`
   ).join('');
+}
+
+function toggleSteps(idx) {
+  const el = document.getElementById(`steps-${idx}`);
+  const btn = el.previousElementSibling;
+  const open = el.style.display === 'none';
+  el.style.display = open ? 'block' : 'none';
+  btn.textContent = open ? '▼ How to do this' : '▶ How to do this';
 }
 
 function closePanel() {
