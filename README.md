@@ -48,6 +48,12 @@ AI_engineer_roadmap/
 
 ---
 
+## 📸 Preview
+
+![AI Engineer Roadmap Tracker](screenshots/tracker.png)
+
+---
+
 ## 📊 Progress Tracker
 
 Open `index.html` via a local server (required to load `daily_tasks.json`):
@@ -141,9 +147,3 @@ cat README.md
 ## 🤝 Contributing
 
 Found a broken resource link or want to suggest a better learning resource? PRs are welcome.
-
----
-
-## 📄 License
-
-MIT — use this freely for your own learning journey.
