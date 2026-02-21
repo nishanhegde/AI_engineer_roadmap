@@ -340,11 +340,54 @@
               "day": 6,
               "title": "System Prompts & Personas",
               "tasks": [
-                "Study effective system prompt patterns (role, constraints, output format)",
-                "Create 5 different system prompts for different personas (coder, writer, analyst, tutor, critic)",
-                "Implement a system prompt manager with CRUD operations",
-                "Test how different system prompts affect output quality",
-                "Document best practices you discover in a prompts.md file"
+                {
+                  "title": "Study effective system prompt patterns (role, constraints, output format)",
+                  "steps": [
+                    "Read both prompt engineering guides in Resources below — spend 15 min on each",
+                    "Note the 3 core elements of a good system prompt: Role ('You are a...'), Constraints ('Always/Never...'), Output format ('Respond in JSON / bullet points')",
+                    "Create `~/ai-engineer/prompts/` directory with an empty `__init__.py`",
+                    "Write your 3 key takeaways as comments in `prompts/__init__.py` — makes them easy to reference later"
+                  ]
+                },
+                {
+                  "title": "Create 5 different system prompts for different personas (coder, writer, analyst, tutor, critic)",
+                  "steps": [
+                    "Create `~/ai-engineer/prompts/personas.py`",
+                    "Define `PERSONAS = {'coder': '...', 'writer': '...', 'analyst': '...', 'tutor': '...', 'critic': '...'}`",
+                    "Each prompt should include: role definition, tone constraints, and expected output format",
+                    "Test all 5 personas with the same question: 'Explain what a REST API is'",
+                    "Note how dramatically different each response feels — same model, same question, different persona"
+                  ]
+                },
+                {
+                  "title": "Implement a system prompt manager with CRUD operations",
+                  "steps": [
+                    "Create `~/ai-engineer/prompts/manager.py`",
+                    "Implement `PromptManager` class with: `add(name, content)`, `get(name)`, `list_all()`, `update(name, content)`, `delete(name)`",
+                    "Store prompts in `prompts/store.json` using `json.dump/load`",
+                    "Add `save()` and `load()` methods that read/write the JSON file on disk",
+                    "Test all 5 operations in a short script — add, read, update, list, delete"
+                  ]
+                },
+                {
+                  "title": "Test how different system prompts affect output quality",
+                  "steps": [
+                    "Pick a complex task: 'Debug this Python code that has a bug' or 'Explain machine learning'",
+                    "Run it with each of your 5 personas and collect all responses",
+                    "Rate each response 1–5 on: clarity, accuracy, helpfulness, and format",
+                    "The 'coder' and 'analyst' personas should score highest for technical tasks",
+                    "Save ratings in `prompts/evaluation.md` — this is real prompt engineering work"
+                  ]
+                },
+                {
+                  "title": "Document best practices you discover in a prompts.md file",
+                  "steps": [
+                    "Create `~/ai-engineer/prompts.md`",
+                    "Write your top 5 learnings (e.g., 'Be specific about output format', 'Constraints improve consistency')",
+                    "Include a before/after example showing how adding constraints improved an output",
+                    "This becomes your personal prompt engineering reference — keep adding to it as you go"
+                  ]
+                }
               ],
               "timeEstimate": "1.5 hours",
               "resources": [
@@ -357,11 +400,56 @@
               "day": 7,
               "title": "Few-Shot Learning & Examples",
               "tasks": [
-                "Implement few-shot prompting with example injection",
-                "Create an example store that holds reusable few-shot examples per task type",
-                "Compare zero-shot vs few-shot performance on 3 different tasks",
-                "Implement dynamic example selection based on input similarity",
-                "Measure and log token usage differences between approaches"
+                {
+                  "title": "Implement few-shot prompting with example injection",
+                  "steps": [
+                    "Create `~/ai-engineer/few_shot.py`",
+                    "Few-shot = giving the model input→output examples before the actual query",
+                    "Format: `'Input: X\\nOutput: Y\\n\\nInput: X2\\nOutput: Y2\\n\\nInput: {actual}\\nOutput:'`",
+                    "Try sentiment classification: provide 3 labeled examples, then ask about a new sentence",
+                    "Compare with zero-shot (no examples) — few-shot should be more consistent and accurate"
+                  ]
+                },
+                {
+                  "title": "Create an example store that holds reusable few-shot examples per task type",
+                  "steps": [
+                    "Create `~/ai-engineer/examples/store.py`",
+                    "Define `ExampleStore` class with a dict: `{'sentiment': [...], 'classification': [...], 'code_review': [...]}`",
+                    "Each example is: `{'input': '...', 'output': '...'}`",
+                    "Add `get_examples(task_type, n=3)` that returns n examples for a given task type",
+                    "Persist to `examples/data.json` with `save()` and `load()` methods"
+                  ]
+                },
+                {
+                  "title": "Compare zero-shot vs few-shot performance on 3 different tasks",
+                  "steps": [
+                    "Choose 3 tasks: sentiment analysis, named entity extraction, code review",
+                    "For each task, run 5 test cases zero-shot and 5 with 3 examples injected",
+                    "Score each: 1 if output matches expected format/answer, 0 if not",
+                    "Few-shot wins especially when output format matters (e.g., 'respond with just Positive/Negative')",
+                    "Print a comparison table: task | zero-shot score | few-shot score"
+                  ]
+                },
+                {
+                  "title": "Implement dynamic example selection based on input similarity",
+                  "steps": [
+                    "Install: `uv add sentence-transformers`",
+                    "Encode all stored examples with `SentenceTransformer('all-MiniLM-L6-v2').encode(texts)`",
+                    "For a new input, encode it and compute cosine similarity against all example embeddings",
+                    "Select the top-k most similar examples as few-shot examples — more relevant = better results",
+                    "Compare random selection vs similarity-based: similarity-based should score higher"
+                  ]
+                },
+                {
+                  "title": "Measure and log token usage differences between approaches",
+                  "steps": [
+                    "Install: `uv add tiktoken`",
+                    "Count tokens: `len(tiktoken.encoding_for_model('gpt-4o-mini').encode(prompt_text))`",
+                    "Log token counts for: zero-shot prompt, 3-shot prompt, and 5-shot prompt",
+                    "Calculate the cost difference using your cost calculator from Day 10",
+                    "Record in `prompts.md`: few-shot adds X tokens but improves accuracy by Y% — is it worth it?"
+                  ]
+                }
               ],
               "timeEstimate": "1.5 hours",
               "resources": [
@@ -374,11 +462,56 @@
               "day": 8,
               "title": "Chain-of-Thought & Structured Reasoning",
               "tasks": [
-                "Implement chain-of-thought (CoT) prompting patterns",
-                "Compare direct answers vs CoT on reasoning tasks (math, logic, code)",
-                "Build a step-by-step reasoning extractor that parses CoT output",
-                "Implement self-consistency: run same prompt N times, pick majority answer",
-                "Create a reasoning evaluation script to score CoT quality"
+                {
+                  "title": "Implement chain-of-thought (CoT) prompting patterns",
+                  "steps": [
+                    "Create `~/ai-engineer/cot.py`",
+                    "Basic CoT: simply append 'Think step by step.' to any question — this alone improves accuracy",
+                    "Zero-shot CoT format: `'Q: {question}\\nA: Let\\'s think step by step.'`",
+                    "Try with a math problem: 'A store has 23 apples, sells 7, then buys 15 more. How many?' — compare with and without CoT",
+                    "Note: CoT uses more tokens but significantly improves multi-step reasoning accuracy"
+                  ]
+                },
+                {
+                  "title": "Compare direct answers vs CoT on reasoning tasks (math, logic, code)",
+                  "steps": [
+                    "Pick 5 tasks: 2 math word problems, 2 logic puzzles, 1 code debugging challenge",
+                    "Run each with direct prompt ('Answer:') and CoT prompt ('Think step by step, then answer:')",
+                    "Score each: 1 for correct answer, 0 for wrong — track separately for direct vs CoT",
+                    "Direct: likely 3–4/5. CoT: likely 4–5/5",
+                    "Save results in `cot_results.md` — concrete evidence CoT works, not just theory"
+                  ]
+                },
+                {
+                  "title": "Build a step-by-step reasoning extractor that parses CoT output",
+                  "steps": [
+                    "Create `extract_reasoning(text: str) -> dict` function in `cot.py`",
+                    "Split the output into thinking steps and final answer",
+                    "Look for markers like 'Therefore', 'So the answer is', 'Answer:', 'Final answer:' to split reasoning from conclusion",
+                    "Return: `{'steps': [...], 'answer': '...', 'step_count': N}`",
+                    "Test with 3 different CoT outputs — the extractor should reliably separate reasoning from answer"
+                  ]
+                },
+                {
+                  "title": "Implement self-consistency: run same prompt N times, pick majority answer",
+                  "steps": [
+                    "Create `self_consistent_answer(prompt, n=5) -> str` function",
+                    "Run the same prompt N times with `temperature=0.7` (variance needed for different reasoning paths)",
+                    "Extract the final answer from each response using your extractor from above",
+                    "Use `collections.Counter(answers).most_common(1)[0][0]` to get the majority answer",
+                    "Test: majority vote should be more accurate than any single run on ambiguous questions"
+                  ]
+                },
+                {
+                  "title": "Create a reasoning evaluation script to score CoT quality",
+                  "steps": [
+                    "Create `~/ai-engineer/eval_cot.py` with 10 test questions and known correct answers",
+                    "Run each question through: direct, CoT, and self-consistency (5 runs) approaches",
+                    "Compare extracted answers to correct answers using exact or fuzzy match",
+                    "Print a final summary: 'Direct: 6/10 | CoT: 8/10 | Self-consistency: 9/10'",
+                    "This evaluation pattern (test set + scoring) applies to all AI work — remember it"
+                  ]
+                }
               ],
               "timeEstimate": "1.5 hours",
               "resources": [
@@ -391,11 +524,56 @@
               "day": 9,
               "title": "Conversation Memory & History",
               "tasks": [
-                "Implement a ConversationMemory class with sliding window strategy",
-                "Add token-aware truncation (keep system prompt + recent messages within limit)",
-                "Implement conversation summarization (use LLM to summarize old messages)",
-                "Add conversation persistence to JSON files",
-                "Test memory strategies with a 20+ message conversation"
+                {
+                  "title": "Implement a ConversationMemory class with sliding window strategy",
+                  "steps": [
+                    "Create `~/ai-engineer/memory.py`",
+                    "Define `ConversationMemory(max_messages=10)` with `self.messages = []` and `self.system = ''`",
+                    "Add `add(role, content)` that appends `{'role': role, 'content': content}` to messages",
+                    "Add `get_messages()` that returns system message + last `max_messages` items from history",
+                    "Sliding window = always keep the most recent exchanges, drop older ones automatically"
+                  ]
+                },
+                {
+                  "title": "Add token-aware truncation (keep system prompt + recent messages within limit)",
+                  "steps": [
+                    "Add `max_tokens=4000` param to `__init__`",
+                    "In `get_messages()`, count tokens for each message using tiktoken",
+                    "Always include the system message first, then add recent messages newest-first until you hit the limit",
+                    "Reverse the list before returning so messages are in chronological order",
+                    "Test: create 30 messages — `get_messages()` should return only as many as fit within the token budget"
+                  ]
+                },
+                {
+                  "title": "Implement conversation summarization (use LLM to summarize old messages)",
+                  "steps": [
+                    "Add `summarize_old(provider)` method to `ConversationMemory`",
+                    "When history exceeds `max_messages`, take the oldest half and send to LLM: 'Summarize this conversation briefly: {old_messages}'",
+                    "Replace those old messages with one system message: `{'role':'system','content':'Earlier context: {summary}'}`",
+                    "Now the model remembers old facts without exceeding context limits",
+                    "Test: 20-message conversation — ask about something said in message 2, it should still know"
+                  ]
+                },
+                {
+                  "title": "Add conversation persistence to JSON files",
+                  "steps": [
+                    "Add `save(filepath)` method using `json.dump({'messages': self.messages, 'system': self.system, 'updated': datetime.now().isoformat()}, open(filepath, 'w'))`",
+                    "Add `load(filepath)` classmethod that reads JSON and restores the object",
+                    "Generate a UUID for each conversation: `import uuid; self.id = str(uuid.uuid4())`",
+                    "Save to `conversations/{id}.json` — each conversation gets its own file",
+                    "Add `conversations/` to `.gitignore` so personal chats stay local"
+                  ]
+                },
+                {
+                  "title": "Test memory strategies with a 20+ message conversation",
+                  "steps": [
+                    "Script a 20-message conversation containing key facts: 'My name is Nishan', 'I work at Google', 'My favorite language is Python'",
+                    "Test sliding window: after message 15, ask about message 2's fact — it should be forgotten",
+                    "Test with summarization: same 20-message flow — early facts should still be accessible via summary",
+                    "Compare token usage: log total token count at each turn for both strategies",
+                    "Document in `prompts.md`: sliding window is simpler, summarization retains more context"
+                  ]
+                }
               ],
               "timeEstimate": "2 hours",
               "resources": [
@@ -408,11 +586,56 @@
               "day": 10,
               "title": "Token Counting & Cost Tracking",
               "tasks": [
-                "Implement token counting with tiktoken for OpenAI models",
-                "Build a cost calculator with per-model pricing (input/output tokens)",
-                "Create a usage tracker that logs every API call with cost",
-                "Add daily/weekly/monthly cost reports",
-                "Implement a budget limit feature that warns when approaching a threshold"
+                {
+                  "title": "Implement token counting with tiktoken for OpenAI models",
+                  "steps": [
+                    "Install: `uv add tiktoken`",
+                    "Create `~/ai-engineer/token_counter.py`",
+                    "Import: `import tiktoken` then `enc = tiktoken.encoding_for_model('gpt-4o-mini')`",
+                    "Define: `def count_tokens(text: str, model='gpt-4o-mini') -> int: return len(enc.encode(text))`",
+                    "Rule of thumb: ~1 token ≈ 4 characters in English — verify this by counting a paragraph"
+                  ]
+                },
+                {
+                  "title": "Build a cost calculator with per-model pricing (input/output tokens)",
+                  "steps": [
+                    "Create `~/ai-engineer/cost_calculator.py`",
+                    "Define pricing: `PRICING = {'gpt-4o-mini': {'input': 0.15/1e6, 'output': 0.60/1e6}, 'gpt-4o': {'input': 2.50/1e6, 'output': 10.00/1e6}, 'claude-haiku-4-5': {'input': 0.80/1e6, 'output': 4.00/1e6}}`",
+                    "Define: `def calculate_cost(model, input_tokens, output_tokens) -> float`",
+                    "Test: 1000 input + 500 output tokens with gpt-4o-mini should cost ~$0.00045",
+                    "Print costs formatted to 6 decimal places: `f'Cost: ${cost:.6f}'`"
+                  ]
+                },
+                {
+                  "title": "Create a usage tracker that logs every API call with cost",
+                  "steps": [
+                    "Create `~/ai-engineer/usage_tracker.py` with `UsageTracker` class",
+                    "Add `log_call(model, input_tokens, output_tokens, prompt_preview='')` method",
+                    "Each log entry: `{'timestamp': ..., 'model': ..., 'input_tokens': ..., 'output_tokens': ..., 'cost': ...}`",
+                    "Save logs to `~/.ai_engineer_usage.json` so they persist across sessions",
+                    "Wrap your `provider.chat()` call to automatically call `log_call` after every API response"
+                  ]
+                },
+                {
+                  "title": "Add daily/weekly/monthly cost reports",
+                  "steps": [
+                    "Add `report(period='daily')` method to `UsageTracker`",
+                    "Group log entries by date using `entry['timestamp'][:10]` for daily, `[:7]` for monthly",
+                    "Sum costs and token counts per group",
+                    "Print a formatted table: date | calls | input tokens | output tokens | total cost",
+                    "Add `total_spent()` method that returns the lifetime sum across all logs"
+                  ]
+                },
+                {
+                  "title": "Implement a budget limit feature that warns when approaching a threshold",
+                  "steps": [
+                    "Add `budget_limit: float = None` param to `UsageTracker.__init__`",
+                    "After each `log_call`, check: `if self.total_spent() > self.budget_limit * 0.8: print('Warning: 80% of budget used')`",
+                    "Add `is_over_budget()` that returns True if `total_spent() >= budget_limit`",
+                    "Test: set budget to $0.01, make a few API calls, confirm the warning triggers",
+                    "This pattern — budget guard before API calls — is used in all production AI systems"
+                  ]
+                }
               ],
               "timeEstimate": "1.5 hours",
               "resources": [
